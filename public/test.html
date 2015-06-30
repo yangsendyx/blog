@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+	div{
+		width: 300px;
+		height: 300px;
+		margin-bottom: 20px;
+	}
+	</style>
+</head>
+<body>
+	<p>本文章转载自<a href="http://baidu.com"> test1 </a>，作为学习之用，但尚未征得原作者同意，若您觉得有任何不妥之处，请在评论中回复，并留下您的联系方式，我会在第一时间进行处理，谢谢！</p>
+	<p>测试转载主体内容</p>
+	<p>测试转载主体内容</p>
+	<p>测试转载主体内容</p>
+
+	<script src="http://cdnjscn.b0.upaiyun.com/libs/jquery/1.11.0-rc1/jquery.min.js"></script>
+	<script type="text/javascript">
+	var div = $('div');
+	var button = $('button');
+	div.css('background', 'rgb(105, 206, 250)');
+	var r = 105, g = 206, b = 250, timer, len = 100, count = 0;
+	var changeR = r, changeG = g, changeB = b;
+	button.click(function() {
+		timer  = setInterval(change, 16.7);
+	});
+
+	function change() {
+		count++;
+		if( count == len ) clearInterval( timer );
+		var difR = ( 145 - r ) / len;
+		var difG = ( 246 - g ) / len;
+		var difB = ( 135 - b ) / len;
+		console.log( difR + '|' + difG + '|' + difB );
+
+		changeR += difR;
+		changeG += difG;
+		changeB += difB;
+		console.log( changeR + '|' + changeG + '|' + changeB );
+
+		div.css('background', 'rgb('+Math.round(changeR)+', '+Math.round(changeG)+', '+Math.round(changeB)+')');
+	}
+	</script>
+</body>
+</html>

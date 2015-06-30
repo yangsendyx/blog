@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+	<meta charset="UTF-8">
+	<title>ys-Home</title>
+	<link rel="stylesheet" type="text/css" href="/css/main.css">
+	<link rel="Shortcut Icon" href="/img/myico.ico">
+</head>
+<body delay>
+	<canvas id="canvas"></canvas>
+	<div class="wrap" ng-controller="myCtrl">
+		<div class="navpos"></div>
+		<nav id="nav">
+			<div class="bar"></div>
+			<ul nav>
+				<li ng-click=toggle('index')>HOME</li>
+				<li ng-click=toggle('note-list')>笔记</li>
+				<li ng-click=toggle('demo')>实验DEMO</li>
+				<li ng-click=toggle('message')>留言</li>
+				<li ng-click=toggle('about')>关于我</li>
+			</ul>
+		</nav>
+
+		<div id="loading" loading>
+			<div class="circle">
+				<span class="doc"></span>
+			</div>
+		</div>
+		
+		<div ui-view set-height></div>
+
+		<div class="footer" id="footer"></div>
+	</div>
+
+
+	<script src="http://cdnjscn.b0.upaiyun.com/libs/angular.js/1.3.0-beta.13/angular.min.js"></script>
+	<script src="http://cdnjscn.b0.upaiyun.com/libs/angular-bindonce/0.3.1/bindonce.min.js"></script>
+	<script src="http://cdnjscn.b0.upaiyun.com/libs/angular-ui-router/0.2.10/angular-ui-router.min.js"></script>
+	<script type="text/javascript" src="/js/service.js"></script>
+	<script type="text/javascript" src="/js/directive.js"></script>
+	<script type="text/javascript" src="/js/controller.js"></script>
+	<script type="text/javascript" src="/js/main.js"></script>
+</body>
+</html>

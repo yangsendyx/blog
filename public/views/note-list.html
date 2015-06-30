@@ -1,0 +1,19 @@
+
+<div id="note-list" page class="page">
+	<div class="list-wrap" style="height: 800px">
+		
+	</div>
+</div>
+
+<div class="tag-wrap" note-tags>
+	<div class="title">
+		<p>标签</p>
+	</div>
+	<hr>
+	<div class="tag {{$index == data.class? 'active': ''}}" ng-repeat="o in data.tags" ng-click=tagFilter(o)>
+		<span class="triangle"></span>
+		<span class="doc"></span>
+		<span class="text">{{o}}</span>
+		<span class="num">{{$index}}</span>
+	</div>
+</div>

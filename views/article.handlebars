@@ -1,0 +1,98 @@
+
+{{#section 'link'}}
+<style type="text/css">
+	#editor { width: 100%; height: 600px;}
+	label { text-align: left !important;}
+	#newCategory { display: none;}
+	#send-wrap {margin-top: 60px;}
+</style>
+{{/section}}
+
+{{> nav}}
+
+<div class="container">
+	<div class="row">
+		<h3 class="alert alert-info" role="alert">文章上传</h3>
+	</div>
+</div>
+<br>
+<div class="container form-wrap">
+	<div class="row">
+		<form role="form" class="form-horizontal">
+			<div class="form-group">
+				<label for="title" class="col-md-1 control-label">标题：</label>
+				<div class="col-md-7">
+					<input type="text" class="form-control" id="title" placeholder="请填写文章标题"
+					value="{{article.title}}"><!-- Handlebars模板引擎 -->
+				</div>
+			</div>
+			<br>
+			<div class="form-group">
+				<label for="desc" class="col-md-1 control-label">描述：</label>
+				<div class="col-md-7">
+					<input type="text" class="form-control" id="desc" placeholder="请填写文章描述信息"
+					value="{{article.desc}}"><!-- 详细解读Handlebars -->
+				</div>
+			</div>
+			<br>
+			<div class="form-group">
+				<label for="file" class="col-md-1 control-label">分类：</label>
+				<div class="col-md-7">
+					<input type="text" class="form-control" id="newCategory" placeholder="请填写新的分类名">
+					<select class="form-control" id="category" data-select="{{article.category}}">
+						{{#each categories}}
+						<option value="{{_id}}">{{name}}</option>
+						{{/each}}
+					</select>
+				</div>
+				<div class="col-md-2">
+					<label class="checkbox-inline">
+				    	<input type="checkbox" value="0" id="checkNewCategory"> 增加新分类
+				    </label>
+				</div>
+			</div>
+			<br>
+			<div class="form-group">
+				<label for="title" class="col-md-1 control-label">转载：</label>
+				<div class="col-md-7" id="choiceType" data-radio="{{article.type}}">
+					<label class="radio-inline">
+				    	<input type="radio" value="转载" name="choiceType" checked> 转载
+				    </label>
+				    <label class="radio-inline">
+				    	<input type="radio" value="原创" name="choiceType"> 原创
+				    </label>
+				</div>
+			</div>
+			<br>
+			<div class="form-group" id="nameText">
+				<label for="title" class="col-md-1 control-label">名称：</label>
+				<div class="col-md-7">
+					<input type="text" class="form-control" placeholder="请填写转载名称"
+					value="{{article.name}}"><!-- 博客园 -->
+				</div>
+			</div>
+			<div class="form-group" id="pathText" data-article="{{article.article}}"
+			data-id="{{article._id}}">
+				<label for="title" class="col-md-1 control-label">地址：</label>
+				<div class="col-md-7">
+					<input type="text" class="form-control" placeholder="请填写转载地址"
+					value="{{article.path}}"><!-- http://baidu.com -->
+				</div>
+			</div>
+			<br>
+			<script id="editor" type="text/plain"></script>
+			<br>
+			<div class="form-group" id="send-wrap">
+				<div class="col-md-1 col-md-offset-11">
+					<button type="button" class="btn btn-primary" id="send">提交</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+{{#section 'script'}}
+<script type="text/javascript" src="/js/admin/lib/ueditor.config.js"></script>
+<script type="text/javascript" src="/js/admin/lib/ueditor.all.min.js"></script>
+<script type="text/javascript" src="/js/admin/article.js"></script>
+{{/section}}
