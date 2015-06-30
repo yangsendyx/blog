@@ -201,41 +201,52 @@ exports.updateArticle = function(req, res, next) {
 // 上传demo API
 exports.updateDemo = function(req, res, next) {
 	var date = Date.now();
-	var newPath = './public/demo/' + date;
-	fs.mkdir(newPath, function(err) {
-		if( err ) return res.json({ type: 'fail', info: err.toString() });
-		var form = new formidable.IncomingForm({ uploadDir: newPath, type: true });
-		form.parse(req, function(err, fields, files) {
+
+	fs.exists('./public/demo', function(exists) {
+		if( exists ) return run();
+		fs.mkdir('./public/demo', function() {
 			if( err ) return res.json({ type: 'fail', info: err.toString() });
-			
-			var count = 0;
-			var run = function(path) { if( count === 2 ) res.json({ type: 'ok', path: path }); };
-
-			var data = {
-				title: fields.title,
-				desc: fields.desc,
-				path: '/demo/' + date + '/'
-			};
-
-			new Demo(data).save(function(err, demo) {
-				if( err ) return res.json({ type: 'fail', info: err.toString() });
-				count++; run( demo.path );
-			});
-
-			var path2 = newPath + '/' + files.file.name;
-			fs.rename(files.file.path, path2, function(err) {
-				if( err ) return res.json({ type: 'fail', info: err.toString() });
-				if( /zip/g.test(files.file.name) ) {
-					var extract = unzip.Extract({ path: newPath + '/' });
-					extract.on('error', function(err) { res.json({ type: 'fail', info: err.toString() }); });
-					extract.on('finish', function() { count++; run( data.path ); });
-					fs.createReadStream( path2 ).pipe( extract );
-				} else {
-					count++; run( data.path );
-				}
-			});
+			run();
 		});
 	});
+
+	function run() {
+		var newPath = './public/demo/' + date;
+		fs.mkdir(newPath, function(err) {
+			if( err ) return res.json({ type: 'fail', info: err.toString() });
+			var form = new formidable.IncomingForm({ uploadDir: newPath, type: true });
+			form.parse(req, function(err, fields, files) {
+				if( err ) return res.json({ type: 'fail', info: err.toString() });
+				
+				var count = 0;
+				var run = function(path) { if( count === 2 ) res.json({ type: 'ok', path: path }); };
+
+				var data = {
+					title: fields.title,
+					desc: fields.desc,
+					path: '/demo/' + date + '/'
+				};
+
+				new Demo(data).save(function(err, demo) {
+					if( err ) return res.json({ type: 'fail', info: err.toString() });
+					count++; run( demo.path );
+				});
+
+				var path2 = newPath + '/' + files.file.name;
+				fs.rename(files.file.path, path2, function(err) {
+					if( err ) return res.json({ type: 'fail', info: err.toString() });
+					if( /zip/g.test(files.file.name) ) {
+						var extract = unzip.Extract({ path: newPath + '/' });
+						extract.on('error', function(err) { res.json({ type: 'fail', info: err.toString() }); });
+						extract.on('finish', function() { count++; run( data.path ); });
+						fs.createReadStream( path2 ).pipe( extract );
+					} else {
+						count++; run( data.path );
+					}
+				});
+			});
+		});
+	}
 };
 
 // 删除demo DEL
