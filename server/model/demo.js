@@ -7,6 +7,7 @@ var DemoSchema = new Schema({
 	title: String,
 	desc: String,
 	path: String,
+	height: Number,
 	meta: {
 		createAt: {
 			type: Date,

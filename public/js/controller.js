@@ -15,10 +15,17 @@ ctrl.controller('myCtrl', ['$scope', '$rootScope', '$timeout', function($scope, 
 			}, 1600);
 		}
 	};
+
+	$scope.login = false;
+	$scope.fn = {
+		login: function(str) {
+			$scope.login = true;
+		},
+	};
 }]);
 
 
-ctrl.controller('ctrl-note-list', ['$scope', '$rootScope', '$timeout', function($scope, $root, $timeout){
+ctrl.controller('ctrl-note-list', ['$scope', '$rootScope', 'ysHttp', function($scope, $root, ajax){
 	$scope.data = {
 		tags: ['全部','html', 'css', 'javascript', 'jquery', 'angular', 'node', 'express', 'nginx'],
 		class: 0
@@ -27,12 +34,14 @@ ctrl.controller('ctrl-note-list', ['$scope', '$rootScope', '$timeout', function(
 	/*$scope.tagFilter = function(name) {
 		console.log(name);
 	};*/
-	$scope.startBo = false;
-	$root.loadingBo = true;
-	$timeout(function() {
+
+	$scope.startBo = true;
+	/*$root.loadingBo = true;
+	ajax.get('/test/api', function(data) {
 		$scope.startBo = true;
 		$root.loadingBo = false;
-	}, 2000);
+		console.log( data );
+	});*/
 }]);
 
 
@@ -47,14 +56,24 @@ ctrl.controller('ctrl-note', ['$scope', '$rootScope', '$timeout', function($scop
 }]);
 
 
-ctrl.controller('ctrl-demo', ['$scope', '$rootScope', '$timeout', function($scope, $root, $timeout){
-	$scope.text = 'demo';
+ctrl.controller('ctrl-demo', ['$scope', '$rootScope', 'ysHttp', function($scope, $root, ajax){
 	$scope.startBo = false;
-	$root.loadingBo = true;
-	$timeout(function() {
-		$scope.startBo = true;
-		$root.loadingBo = false;
-	}, 6000);
+
+	$scope.data = {};
+	$scope.data.nowLen = 0;
+	$scope.data.httpBo = true;
+
+	$scope.fnHttp = function(start) {
+		var url = '/demo/list?start=' + start;
+		ajax.get(url, function(data) {
+			$scope.startBo = true;
+			$scope.data.length = data.length;
+			$scope.data.demos = data.data;
+			$scope.data.nowLen += data.data.length;
+			$scope.data.httpBo = true;
+		});
+	};
+	$scope.fnHttp(0);
 }]);
 
 

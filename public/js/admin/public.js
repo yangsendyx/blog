@@ -3,6 +3,14 @@
 	var $nav = $('#nav');
 	var num = parseInt( $nav.data('active') );
 	$nav.find('li').eq(num).addClass('active');
+
+	$('#logout').click(function() {
+		if( confirm('确定退出？') ) {
+			get('/admin/logout', function() {
+				window.location.href = '/admin';
+			});
+		}
+	});
 })();
 
 function get(url, cb) {
@@ -74,7 +82,7 @@ function errXhr(http, text, err) {
 	if( http.status == 401 ) {
 		window.location.href = '/admin';
 	} else {
-		var info;
+		var info = '';
 		info += '获取数据出错，请稍后再试\n';
 		info += '网络状态码：' + http.status + '\n';
 		info += 'ajax状态码：' + http.readyState + '\n';

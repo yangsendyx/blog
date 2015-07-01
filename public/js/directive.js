@@ -173,12 +173,11 @@ Canvas.prototype = {
 
 var direc = angular.module('myDirective', []);
 
-direc.directive('delay', ['ysAnimate', function(ysA){
+direc.directive('delay', ['ysAnimate',  function(ysA){
 	return {
 		link: function($scope, iElm, iAttrs) {
 			var clientW = CLIENT_W;
 			var clientH = CLIENT_H - 42;
-			
 			var can = document.getElementById('canvas');
 			can.width = clientW;
 			can.height = clientH;
@@ -220,6 +219,7 @@ direc.directive('index', ['$timeout', '$state', '$rootScope', 'ysAnimate', funct
 			}
 
 			$timeout(function() {
+				document.documentElement.scrollTop = document.body.scrollTop = 0;
 				for( i=0; i<len; i++ ) {
 					animate.transform( angular.element(section[i]), {target: { translate: [0, 0]}, time: 800, fx: 'easeOutStrong'});
 					animate.move(angular.element(section[i]), {target: {opacity: 1}, time: 800});
@@ -317,6 +317,7 @@ direc.directive('page', ['$timeout', '$state', '$rootScope', 'ysAnimate', functi
 								'-o-transform': 'translate(0px, -300px)',
 								'transform': 'translate(0px, -300px)'
 							});
+							document.documentElement.scrollTop = document.body.scrollTop = 0;
 							animate.transform( tag, {target: { translate: [0, 0]}, time: 800, fx: 'backOut'});
 							animate.move(tag, {target: {opacity: opacityVal}, time: 800});
 						}
@@ -425,3 +426,92 @@ direc.directive('setHeight', function(){
 		}
 	};
 });
+
+
+direc.directive('pubuliu', ['$timeout', '$window', 'ysAnimate', 'ysHttp', function($timeout, $window, animate, ajax){
+	return {
+		link: function($scope, iElm, iAttrs) {
+			var sections = iElm.find('section');
+			var w = sections.eq(0)[0].offsetWidth;
+			var scale = w / 400;
+			var bo = true, height;
+			var run = function() {
+				var data = $scope.data.demos;
+				var len = data.length;
+				var time = 10;
+				var distance = 600;
+				angular.forEach(data, function(el, i) {
+					time += 100;
+					var height = el.height * scale;
+					var box = angular.element('<div class="box">');
+					var str =  '<a href="'+el.path+'" target="_blank"><div class="time">'+el.time+'</div><img src="'+el.path+'/photo.jpg" style="height:'+height+'px"><div class="text"><h3>'+el.title+'</h3><p>'+el.desc+'</p></div></a>';
+					box.html( str );
+					box.css('opacity', 0);
+					sections.eq( getMinSection(sections) ).append( box );
+					$timeout(function() {
+						animate.move(box, {
+							target: { opacity: 1},
+							time: 400
+						});
+					}, time);
+				});
+				height = iElm[0].offsetHeight;
+				if( bo ) {
+					bo = false;
+					req();
+				}
+			};
+
+			var req = function() {
+				angular.element($window).bind('scroll', function() {
+					var t = this.document.body.scrollTop || this.document.documentElement.scrollTop;
+					if( t > height - CLIENT_H ) {
+						if( $scope.data.httpBo && $scope.data.nowLen < $scope.data.length ) {
+							$scope.data.httpBo = false;
+							$scope.fnHttp( $scope.data.nowLen );
+						}
+					}
+				});
+			};
+
+			$scope.$watch('data.demos', function(newVal, oldVal) {
+				if( newVal != oldVal ) run();
+			});
+		}
+	};
+}]);
+
+function getMinSection( sections ) {
+	var len = sections.length;
+	arr = [];
+	for( var i=0; i<len; i++ ) {
+		var json = {};
+		json.index = i;
+		json.height = sections.eq(i)[0].offsetHeight;
+		arr.push( json );
+	}
+
+	arr.sort(function(a, b) {
+		return a.height - b.height;
+	});
+	return arr[0].index;
+}
+
+
+direc.directive('signIn', ['ysAnimate', function(animate){
+	return {
+		templateUrl: 'views/signIn.html',
+		link: function($scope, iElm, iAttrs) {
+			var h = iElm[0].offsetHeight;
+			var late = CLIENT_H/2 + h;
+			iElm.css({
+				'top': CLIENT_H/2-h/2 + 'px',
+				'-webkit-transform': 'translate(0px, '+(-late)+'px)',
+				'-moz-transform': 'translate(0px, '+(-late)+'px)',
+				'-ms-transform': 'translate(0px, '+(-late)+'px)',
+				'-o-transform': 'translate(0px, '+(-late)+'px)',
+				'transform': 'translate(0px, '+(-late)+'px)',
+			});
+		}
+	};
+}]);

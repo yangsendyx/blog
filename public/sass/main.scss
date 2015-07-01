@@ -11,7 +11,7 @@ body{
 	opacity: 0;
 }
 ul {
-	list-style: none;
+	list-style: none; 
 }
 
 @font-face {
@@ -129,6 +129,66 @@ canvas{
 	}
 }
 
+// sign-in
+#signIn {
+	width: 300px;
+	@include background-image( linear-gradient(rgba(255, 255, 255, 1), rgba(187, 187, 187, 1)) );
+	position: absolute;
+	left: 50%;
+	margin-left: -150px;
+	z-index: 5;
+	@include border-radius(20px);
+	@include box-shadow(0 0 10px #333);
+	padding: 15px 0;
+	text-align: center;
+	div{
+		font-size: 14px;
+		height: 26px;
+		width: 70%;
+		margin-top: 20px;
+		margin-left: auto;
+		margin-right: auto;
+		input{
+			width: 100%;
+			height: 26px;
+			outline: none;
+			box-sizing: border-box;
+			padding-left: 12px;
+			border: 1px solid #ccc;
+			@include transition(all .4s);
+			background-color: #eee;
+			&:focus{
+				@include box-shadow(0 0 10px #aaa);
+			}
+		}
+		.btn{
+			display: inline-block;
+			width: 60px;
+			height: 26px;
+			line-height: 26px;
+			cursor: pointer;
+			@include transition(all .3s);
+			&:nth-of-type(1){
+				margin-right: 5px;
+			}
+			&:nth-of-type(1){
+				margin-left: 5px;
+			}
+			&:hover{
+				background: #666;
+				color: #eee;
+				@include box-shadow(0 0 6px #333);
+			}
+		}
+	}
+	p{
+		&:nth-of-type(2) {
+			font-size: 12px;
+			color: #666;
+		}
+	}
+}
+
 // index
 #index {
 	position: relative;
@@ -227,7 +287,6 @@ canvas{
 
 #note-list {
 	
-	
 }
 .tag-wrap{
 	position: absolute;
@@ -314,7 +373,77 @@ canvas{
 }
 
 #demo {
-	height: 1300px;
+	background: none;
+	.pubul-wrap{
+		@include legacy-pie-clearfix();
+		section {
+			width: 31%;
+			float: left;
+			margin: 2% 1%;
+			
+			.box{
+				width: 100%;
+				box-sizing: border-box;
+				position: relative;
+				margin-top: 30px;
+				background-color: rgba(255, 255, 255, .85);
+				@include transition(all, .4s);
+				overflow: hidden;
+				img{
+					width: 100%;
+					vertical-align: top;
+					border-width: 0;
+				}
+				.time{
+					position: absolute;
+					right: 10px;
+					top: 6px;
+					font-size: 14px;
+					opacity: 0;
+					color: #fff;
+					padding: 0 6px;
+					background-color: rgba(0,0,0,.3);
+					@include transform( translate(100px, 0) );
+					@include transition(all, .4s);
+				}
+				.text{
+					$height: 60px;
+					text-align: center;
+					position: relative;
+					height: $height;
+					* {
+						width: 100%;
+						position: absolute;
+						margin: 0;
+						line-height: $height;
+						@include transition(opacity .4s);
+					}
+					p{
+						opacity: 0;
+						font-size: 14px;
+					}
+				}
+				a{
+					color: #333;
+					text-decoration: none;
+				}
+				
+				&:hover{
+					@include box-shadow(0 0 20px #000);
+				}
+				&:hover .text h3{
+					opacity: 0;
+				}
+				&:hover .text p{
+					opacity: 1
+				}
+				&:hover .time{
+					opacity: 1;
+					@include transform( translate(0, 0) );
+				}
+			}
+		}
+	}
 }
 
 #message {

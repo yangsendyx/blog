@@ -12,13 +12,13 @@ var Category = require('../model/category');
 
 // 验证用户后台权限
 exports.verify = function( req, res, next ) {
-	/*var user = req.session.user || '';
+	var user = req.session.user || '';
 	if( user && user.role >= 10 ) return next();
 	if( req.xhr ) {
 		res.sendStatus(401);
 	} else {
 		res.redirect(303, '/admin');
-	}*/
+	}
 	next();
 };
 
@@ -98,7 +98,25 @@ exports.demoList = function(req, res, next) {
 
 // 登陆 API
 exports.login = function(req, res, next) {
-	
+	var name = req.body.name;
+	var pass = req.body.pass;
+
+	User.findOne({name: name}, function(err, user) {
+		if( err ) return res.json({ type: 'fail', info: err.toString() });
+		if( !user ) return res.json({ type: 'fail', info: 'user is not found' });
+
+		if( user.pass == pass ) {
+			req.session.user = user;
+			res.json({ type: 'ok' });
+		} else {
+			res.json({ type: 'fail', info: 'password is wrong' });
+		}
+	});
+};
+
+exports.logout = function(req, res) {
+	delete req.session.user;
+	res.json({ type: 'ok' });
 };
 
 // 上传文章 API
@@ -204,7 +222,7 @@ exports.updateDemo = function(req, res, next) {
 
 	fs.exists('./public/demo', function(exists) {
 		if( exists ) return run();
-		fs.mkdir('./public/demo', function() {
+		fs.mkdir('./public/demo', function(err) {
 			if( err ) return res.json({ type: 'fail', info: err.toString() });
 			run();
 		});
@@ -224,7 +242,8 @@ exports.updateDemo = function(req, res, next) {
 				var data = {
 					title: fields.title,
 					desc: fields.desc,
-					path: '/demo/' + date + '/'
+					path: '/demo/' + date + '/',
+					height: fields.height
 				};
 
 				new Demo(data).save(function(err, demo) {

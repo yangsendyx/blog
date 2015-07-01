@@ -1,5 +1,7 @@
 
 var admin = require('./controller/admin');
+var article = require('./controller/article');
+var demo = require('./controller/demo');
 
 module.exports = function(app) {
 
@@ -12,7 +14,8 @@ module.exports = function(app) {
 	app.get('/admin/article/list', admin.verify, admin.articleList);
 	app.get('/admin/article/update/:id', admin.verify, admin.articleUpdate);
 	// admin POST API
-	app.post('/admin/login', admin.verify, admin.login);
+	app.post('/admin/login', admin.login);
+	app.get('/admin/logout', admin.verify, admin.logout);
 	app.post('/admin/update/article', admin.verify, admin.updateArticle);
 	app.post('/admin/update/demo', admin.verify, admin.updateDemo);
 	// admin DELETE API
@@ -20,5 +23,13 @@ module.exports = function(app) {
 	app.delete('/admin/article/list/del/:id', admin.verify, admin.articleListDel);
 
 
-	// 
+	// 文章API
+	app.get('/article/list', article.list);
+
+
+	// demoAPI
+	app.get('/demo/list', demo.list);
+
+
+	// 留言API
 };

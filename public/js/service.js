@@ -242,3 +242,49 @@ service.factory('ysAnimate', function() {
 });
 
 
+service.factory('ysHttp', ['$rootScope', '$http', function($root, $http) {
+	return {
+		before: function() {
+			$root.loadingBo = true;
+		},
+		after: function() {
+			$root.loadingBo = false;
+		},
+		get: function(url, cb) {
+			var This = this;
+			This.before();
+			$http.get(url).success(function(data) {
+				This.success(data, cb);
+			}).error(function(data) {
+				This.error( data );
+			});
+		},
+		post: function(url, data, cb) {
+
+		},
+		/*put: function(url, data, cb) {
+
+		},
+		delete: function(url, cb) {
+
+		},
+		jsonp: function(url, cb) {
+
+		},*/
+
+		success: function(data, cb) {
+			this.after();
+			if( data.type == 'ok' ) return cb( data );
+
+			if( data.info === '' ) {
+				console.log('调用Dialog');
+			} else {
+				console.log('调用Dialog');
+			}
+		},
+		error: function(data) {
+			this.after();
+			console.log('调用Dialog');
+		}
+	};
+}]);
