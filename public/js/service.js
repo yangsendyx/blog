@@ -115,6 +115,7 @@ service.factory('ysAnimate', function() {
 				iCur[attr] = val;
 			}
 
+
 			var startTime = new Date().getTime();
 
 			var run = function(){
@@ -260,7 +261,13 @@ service.factory('ysHttp', ['$rootScope', '$http', function($root, $http) {
 			});
 		},
 		post: function(url, data, cb) {
-
+			var This = this;
+			This.before();
+			$http.post(url, data).success(function(data) {
+				This.success(data, cb);
+			}).error(function(data) {
+				This.error( data );
+			});
 		},
 		/*put: function(url, data, cb) {
 

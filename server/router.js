@@ -2,6 +2,7 @@
 var admin = require('./controller/admin');
 var article = require('./controller/article');
 var demo = require('./controller/demo');
+var msg = require('./controller/msg');
 
 module.exports = function(app) {
 
@@ -32,4 +33,7 @@ module.exports = function(app) {
 
 
 	// 留言API
+	app.get('/message/list', msg.list);
+	// save
+	app.post('/message/save', msg.save);
 };

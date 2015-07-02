@@ -35,8 +35,8 @@ ul {
 // 背景canvas
 canvas{
 	position: fixed;
-	top: 50px;
 	width: 100%;
+	@include filter( blur(2px) );
 }
 
 .wrap {
@@ -53,8 +53,10 @@ canvas{
 	width: 100%;
 	height: 50px;
 	line-height: 50px;
+	opacity: 0;
 	@include box-shadow(#333 0 0 10px);
-	@include background-image(linear-gradient(white, #bbb));
+	@include background-image(linear-gradient(rgba(255,255,255,.85), rgba(187,187,187,.85)));
+	@include transition(opacity .4s);
 	
 	.bar{
 		width: 100%;
@@ -70,7 +72,7 @@ canvas{
 
 		li {
 			cursor: pointer;
-			padding:0 25px;
+			padding: 0 25px;
 			color: #555;
 			font-weight: bold;
 			@include float(left);
@@ -96,7 +98,7 @@ canvas{
 #loading{
 	width: 200px;
 	height: 200px;
-	position: absolute;
+	position: fixed;
 	left: 50%;
 	margin-left: -130px;
 	z-index: 10;
@@ -189,11 +191,27 @@ canvas{
 	}
 }
 
+// dialog
+#dialog {
+	position: absolute;
+	width: 200px;
+	left: 50%;
+	margin-left: -120px;
+	top: 50%;
+	z-index: 10;
+	text-align: center;
+	padding: 10px 20px;
+	opacity: 0;
+	@include background-image( linear-gradient(rgba(255, 255, 255, 1), rgba(187, 187, 187, 1)) );
+	@include box-shadow(0 0 10px #333);
+	@include border-radius(16px);
+}
+
 // index
 #index {
 	position: relative;
 	width: 100%;
-	overflow-y: hidden;
+	overflow: hidden;
 	section{
 		width: 180px;
 		height: 230px;
@@ -255,7 +273,7 @@ canvas{
 				position: absolute;
 				width: 100%;
 				text-align: center;
-				@include transition(color, .4s);
+				@include transition(all .3s);
 			}
 
 			div.iconfont {
@@ -276,17 +294,22 @@ canvas{
 		&:hover div.iconfont, &:hover p.text {
 			color: #333;
 		}
+		&:hover div.iconfont{
+			@include transform( translate(0, -30px) );
+		}
+		&:hover p.text {
+			opacity: 1 !important;
+		}
 	}
 }
 
 .page {
 	margin: 20px auto 0;
-	@include background-image( linear-gradient(rgba(255, 255, 255, .85), rgba(187, 187, 187, .85)) );
 	width: 1024px;
 }
 
 #note-list {
-	
+	@include background-image( linear-gradient(rgba(255, 255, 255, .85), rgba(187, 187, 187, .85)) );
 }
 .tag-wrap{
 	position: absolute;
@@ -369,11 +392,11 @@ canvas{
 }
 
 #note {
+	@include background-image( linear-gradient(rgba(255, 255, 255, .85), rgba(187, 187, 187, .85)) );
 	height: 1300px;
 }
 
 #demo {
-	background: none;
 	.pubul-wrap{
 		@include legacy-pie-clearfix();
 		section {
@@ -447,10 +470,224 @@ canvas{
 }
 
 #message {
-	height: 1300px;
+	@include legacy-pie-clearfix();
+	section{
+		float: left;
+		box-sizing: border-box;
+		padding: 0 10px;
+		&:nth-of-type(1) {
+			width: 60%;
+			.msgWrap{
+				position: relative;
+				box-sizing: border-box;
+				padding: 16px 0;
+				.line{
+					width: 2px;
+					height: 100%;
+					top: 0;
+					position: absolute;
+					left: 30px;
+					@include background-image( linear-gradient(rgba(187, 187, 187, .85), rgba(255, 255, 255, .85)) );
+				}
+				ul{
+					padding: none;
+					margin: none;
+					width: 92%;
+					margin-left: 32px;
+					overflow: hidden;
+					li {
+						&:last-child{
+							margin-bottom: 10px;
+						}
+						&:first-child{
+							margin-top: 20px;
+						}
+						width: 95%;
+						margin-top: 50px;
+						margin-left: 14px;
+						position: relative;
+						.reply{
+							margin-top: 15px;
+							position: relative;
+							margin-left: 26px;
+							.triangle{
+								display: inline-block;
+								width: 0;
+								height: 0;
+								position: absolute;
+								border-width: 10px;
+								border-style: solid;
+								border-color: transparent transparent rgba(255,255,255,.85) transparent;
+								top: -20px;
+								left: 100px;
+							}
+							.name {
+								font-size: 14px;
+							}
+							.time {
+								font-size: 12px;
+							}
+						}
+						.img{
+							position: absolute;
+							width: 80px;
+							height: 80px;
+							top: -10px;
+							@include box-shadow(0 0 6px #333);
+							box-sizing: border-box;
+							@include border-radius(50%);
+							border: 4px solid #fff;
+							overflow: hidden;
+							img{
+								width: 100%;
+								height: 100%;
+								vertical-align: top;
+								border-width: 0;
+							}
+						}
+						.info-wrap{
+							@include box-shadow(0 0 10px #333);
+							margin-top: 10px;
+							margin-left: 30px;
+							@include transition(all .4s);
+							@include border-radius(5px);
+							overflow: hidden;
+							&:hover{
+								@include box-shadow(0 0 15px #333);
+							}
+						}
+						.title{
+							padding-left: 70px;
+							box-sizing: border-box;
+							height: 42px;
+							line-height: 42px;
+							background: rgba(255, 255, 255, .85);
+							span{
+								display: inline-block;
+							}
+							.time{
+								margin-left: 10px;
+								font-size: 12px;
+								color: #999;
+							}
+							.comment{
+								float: right;
+								margin-right: 15px;
+								cursor: pointer;
+							}
+						}
+						.body{
+							box-sizing: border-box;
+							padding: 15px 15px 15px 70px;
+							background-color: rgba(170, 170, 170, .85);
+							color: #eee;
+							font-size: 14px;
+						}
+					}
+				}
+			}
+			$height: 46px;
+			.bar{
+				width: 100%;
+				height: $height;
+				position: relative;
+				@include background-image( linear-gradient(rgba(255, 255, 255, 1), rgba(187, 187, 187, 1)) );
+				@include border-radius(5px);
+				@include box-shadow(0 0 10px #333);
+				.triangle{
+					display: inline-block;
+					width: 0;
+					height: 0;
+					border-style: solid;
+					border-width: 16px;
+					position: absolute;
+					left: 15px;
+				}
+			}
+			.top{
+				.triangle{
+					top: 100%;
+					border-color: rgba(187,187,187,1) transparent transparent transparent;
+				}
+				p {
+					line-height: $height;
+					padding-left: 50px;
+				}
+			}
+			.bot{
+				.triangle{
+					top: -32px;
+					border-color: transparent transparent rgba(255,255,255,1) transparent;
+				}
+			}
+		}
+		&:nth-of-type(2) {
+			width: 40%;
+			padding-top: 15px;
+			.wrap {
+				@include box-shadow(0 0 16px #333);
+				@include border-radius(5px);
+				overflow: hidden;
+				.title{
+					background-color: rgba(255,255,255,.85);
+					height: 46px;
+					box-sizing: border-box;
+					padding-left: 30px;
+					line-height: 46px;
+					.info{
+						color: #999;
+						float: right;
+						margin-right: 20px;
+						font-size: 14px;
+					}
+				}
+				.body{
+					height: 330px;
+					background-color: rgba(180,180,180,.85);
+					textarea {
+						box-sizing: border-box;
+						resize: none;
+						width: 90%;
+						height: 70%;
+						margin: 5%;
+						padding: 5px 10px;
+						font-size: 16px;
+						outline: none;
+						background-color: rgba(255,255,255,.55);
+						border: 1px solid #ccc;
+						@include transition(all .3s);
+						&:focus{
+							@include box-shadow(0 0 10px #333);
+						}
+					}
+					.btnwrap{
+						@include legacy-pie-clearfix();
+						.button{
+							float: right;
+							padding: 8px 14px;
+							color: #fff;
+							cursor: pointer;
+							margin-right: 16px;
+							&:nth-of-type(1){
+								background-color: rgba(81, 112, 145, .85);
+							}
+							&:nth-of-type(2){
+								background-color: rgba(96, 133, 80, .85);
+							}
+						}
+					}
+				}
+			}
+		}
+		.fix {
+			position: fixed;
+			top: 0;
+		}
+	}
 }
 
 #about {
+	@include background-image( linear-gradient(rgba(255, 255, 255, .85), rgba(187, 187, 187, .85)) );
 	height: 1300px;
 }
 

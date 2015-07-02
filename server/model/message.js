@@ -1,29 +1,29 @@
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var ObjectId = Schema.Types.ObjectId;
+// var ObjectId = Schema.Types.ObjectId;
 
 var MsgSchema = new Schema({
-	from: { type: ObjectId, ref: 'user' },
+	from: String,
+	msg: String,
+	qq: Number,
+	time: {
+		type: Date,
+		default: Date.now()
+	},
 	reply: [{
-		from: { type: ObjectId, ref: 'user' },
-		to: { type: ObjectId, ref: 'user' },
-		content: String
-	}],
-	content: String,
-	meta: {
-		createAt: {
-			type: Date,
-			default: Date.now()
-		},
-		updateAt: {
+		from: String,
+		to: String,
+		qq: Number,
+		msg: String,
+		time: {
 			type: Date,
 			default: Date.now()
 		}
-	}
+	}]
 });
 
-MsgSchema.pre('save', function(next) {
+/*MsgSchema.pre('save', function(next) {
 	if( this.isNew ) {
 		this.meta.createAt = this.meta.updateAt = Date.now();
 	} else {
@@ -31,7 +31,7 @@ MsgSchema.pre('save', function(next) {
 	}
 	next();
 });
-
+*/
 MsgSchema.statics = {
 	findAll: function(cb) {
 		return this.find({}).sort('meta.updateAt').exec(cb);

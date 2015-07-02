@@ -1,4 +1,60 @@
 
-<div id="message" page class="page">
-	<h1>{{text}}</h1>
+<div id="message" class="page" page>
+	<section>
+		
+		<div class="bar top">
+			<span class="triangle"></span>
+			<p>留言回复</p>
+		</div>
+		<div class="msgWrap">
+			<div class="line"></div>
+			<ul ctrl-height>
+				<li bindonce ng-repeat="o in data.msgs">
+					<div class="img">
+						<img ng-src='{{o.qq?"http://q4.qlogo.cn/g?b=qq&nk="+o.qq+"&s=3":"/img/default.jpg"}}'>
+					</div>
+					<div class="info-wrap">
+						<div class="title">
+							<span class="name">{{o.from}}</span>
+							<span class="time">[{{o.time}}]</span>
+							<span class="comment" ng-click="comment(o.from, o.id)">回复</span>
+						</div>
+						<div class="body">{{o.msg}}</div>
+					</div>
+					<div class="reply" bindonce ng-repeat="r in o.reply">
+						<span class="triangle"></span>
+						<div class="img">
+							<img ng-src='{{r.qq?"http://q4.qlogo.cn/g?b=qq&nk="+r.qq+"&s=3":"/img/default.jpg"}}'>
+						</div>
+						<div class="info-wrap">
+							<div class="title">
+								<span class="name">{{r.from}} 回复 {{r.to}}</span>
+								<span class="time">[2015-07-11 18:11:11]</span>
+								<span class="comment" ng-click="comment(r.from, o.id)">回复</span>
+							</div>
+							<div class="body">{{r.msg}}</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="bar bot">
+			<span class="triangle"></span>
+		</div>
+	</section>
+	<section>
+		<div class="wrap">
+			<div class="title">
+				<span class="text">留言板</span>
+				<span class="info" ng-show="msg.info.to">回复 {{msg.info.to}}</span>
+			</div>
+			<div class="body">
+				<textarea placeholder="请输入留言内容" ng-model="msg.info.msg" ng-blur=fnBlur() auto-focus></textarea>
+				<div class="btnwrap">
+					<div class="button" ng-click=subMsg()>提交</div>
+					<div class="button" ng-show="msg.info.to" ng-click=hideBtn()>取消回复</div>
+				</div>
+			</div>
+		</div>
+	</section>
 </div>

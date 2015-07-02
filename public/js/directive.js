@@ -177,7 +177,7 @@ direc.directive('delay', ['ysAnimate',  function(ysA){
 	return {
 		link: function($scope, iElm, iAttrs) {
 			var clientW = CLIENT_W;
-			var clientH = CLIENT_H - 42;
+			var clientH = CLIENT_H+42;
 			var can = document.getElementById('canvas');
 			can.width = clientW;
 			can.height = clientH;
@@ -218,6 +218,9 @@ direc.directive('index', ['$timeout', '$state', '$rootScope', 'ysAnimate', funct
 				});
 			}
 
+			var nav = document.getElementById('nav');
+			angular.element( nav ).css( 'opacity', 0 );
+
 			$timeout(function() {
 				document.documentElement.scrollTop = document.body.scrollTop = 0;
 				for( i=0; i<len; i++ ) {
@@ -249,26 +252,6 @@ direc.directive('index', ['$timeout', '$state', '$rootScope', 'ysAnimate', funct
 }]);
 
 
-direc.directive('indexHoverIcon', ['ysAnimate', function(animate){
-	return {
-		link: function($scope, iElm, iAttrs) {
-			var icon = iElm.find('div').eq(2);
-			var text = iElm.find('p');
-
-			iElm.on('mouseenter', function() {
-				animate.transform(icon, {target: {translate: [0, -30]}, time: 200});
-				animate.move(text, {target: {opacity: 1}, time: 300});
-			});
-
-			iElm.on('mouseleave', function() {
-				animate.transform(icon, {target: {translate: [0, 0]}, time: 200});
-				animate.move(text, {target: {opacity: 0}, time: 300});
-			});
-		}
-	};
-}]);
-
-
 direc.directive('page', ['$timeout', '$state', '$rootScope', 'ysAnimate', function($timeout, $state, $root, animate){
 	return {
 		link: function($scope, iElm, iAttrs) {
@@ -283,6 +266,9 @@ direc.directive('page', ['$timeout', '$state', '$rootScope', 'ysAnimate', functi
 				'transform': 'translate('+(-distance)+'px, 0px)',
 				'opacity': 0
 			});
+
+			var nav = document.getElementById('nav');
+			angular.element( nav ).css( 'opacity', 1 );
 
 			$scope.$watch('pagename', function(newValue, oldValue, scope) {
 				if( newValue != $root.oldPage ) {
@@ -302,6 +288,7 @@ direc.directive('page', ['$timeout', '$state', '$rootScope', 'ysAnimate', functi
 			$scope.$watch('startBo', function(newValue, oldValue, scope) {
 				if( newValue ) {
 					$timeout(function() {
+						document.documentElement.scrollTop = document.body.scrollTop = 0;
 						animate.transform( iElm, {target: { translate: [0, 0]}, time: 800, fx: 'backOut'});
 						animate.move(iElm, {target: {opacity: 1}, time: 800});
 						$root.time = 10;
@@ -317,7 +304,6 @@ direc.directive('page', ['$timeout', '$state', '$rootScope', 'ysAnimate', functi
 								'-o-transform': 'translate(0px, -300px)',
 								'transform': 'translate(0px, -300px)'
 							});
-							document.documentElement.scrollTop = document.body.scrollTop = 0;
 							animate.transform( tag, {target: { translate: [0, 0]}, time: 800, fx: 'backOut'});
 							animate.move(tag, {target: {opacity: opacityVal}, time: 800});
 						}
@@ -504,6 +490,7 @@ direc.directive('signIn', ['ysAnimate', function(animate){
 		link: function($scope, iElm, iAttrs) {
 			var h = iElm[0].offsetHeight;
 			var late = CLIENT_H/2 + h;
+			var blur;
 			iElm.css({
 				'top': CLIENT_H/2-h/2 + 'px',
 				'-webkit-transform': 'translate(0px, '+(-late)+'px)',
@@ -511,6 +498,105 @@ direc.directive('signIn', ['ysAnimate', function(animate){
 				'-ms-transform': 'translate(0px, '+(-late)+'px)',
 				'-o-transform': 'translate(0px, '+(-late)+'px)',
 				'transform': 'translate(0px, '+(-late)+'px)',
+			});
+			
+			$scope.$watch('loginBo', function(newVal, oldVal) {
+				if( newVal != oldVal ) {
+					if( newVal ) {						
+						animate.transform(iElm, {
+							target: { translate: [0, 0] },
+							time: 700, fx: 'backOut'
+						});
+					} else {
+						animate.transform(iElm, {
+							target: { translate: [0, -late] },
+							time: 700, fx: 'easeOutStrong'
+						});
+					}
+				}
+			});
+		}
+	};
+}]);
+
+
+direc.directive('dialog', ['$timeout', 'ysAnimate', function($timeout, animate){
+	return {
+		template: '<p bindonce ng-bind="msg.dialog"></p>',
+		link: function($scope, iElm, iAttrs) {
+			iElm.css({ display: 'none', opacity: 0, top: CLIENT_H/2 + 'px' });
+			$scope.$watch('dialogBo', function(newVal, oldVal) {
+				if( newVal != oldVal && newVal ) {
+					var h = iElm[0].offsetHeight;
+					iElm.css({
+						display: 'block',
+						marginTop: -(h/2 + 50) + 'px'
+					});
+					animate.move(iElm, { target: { opacity: 1 }, time: 400 });
+
+					var run = function() { iElm.css('display', 'none'); };
+					$timeout(function() {
+						animate.move(iElm, { target: { opacity: 0 }, time: 400, fn: run });
+					}, 3000);
+					$timeout(function() { $scope.dialogBo = false; }, 3400);
+				}
+			});
+		}
+	};
+}]);
+
+
+direc.directive('autoFocus', function(){
+	return {
+		link: function($scope, iElm, iAttrs) {
+			$scope.$watch('autoFocus', function(newVal) {
+				if( newVal ) {
+					iElm[0].focus();
+				} else {
+					iElm[0].blur();
+				}
+			});
+		}
+	};
+});
+
+
+direc.directive('ctrlHeight', ['$timeout', 'ysAnimate', function($timeout, animate){
+	return {
+		link: function($scope, iElm, iAttrs) {
+			$scope.$watch('ctrlHeightBo', function(newVal) {
+				if( newVal ) {
+					var h = iElm[0].offsetHeight;
+					iElm.css('height', h + 'px');
+					animate.move(iElm, {
+						target: { height: 0 },
+						time: 600, fx: 'easeOutStrong',
+					});
+					$timeout(function() {
+						$scope.getMsg( $scope.replyPageNum, true );
+						$scope.ctrlHeightBo = false;
+					}, 600);
+				}
+			});
+
+			$scope.$watch('ctrlOpenUlBo', function(newVal) {
+				if( newVal ) {
+					$timeout(function() {
+						var lis = iElm.find('li');
+						var len = lis.length;
+						var mh = (len-1)*50+30;
+						
+						for( var i=0; i<len; i++ ) mh += lis[i].offsetHeight;
+						
+						animate.move(iElm, {
+							target: { height: mh },
+							time: 600, fx: 'easeInStrong',
+						});
+						$timeout(function() {
+							$scope.ctrlOpenUlBo = false;
+						}, 600);
+					}, 100);
+				}
 			});
 		}
 	};
