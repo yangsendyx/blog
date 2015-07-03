@@ -3,6 +3,7 @@
 <style type="text/css">
 	.modal-body { text-align: center;}
 	#modal-img{ vertical-align: top; margin: 10px auto; box-shadow: 0 0 10px #555;}
+	.desc{ display: inline-block; max-width: 150px;white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
 </style>
 {{/section}}
 
@@ -32,7 +33,7 @@
 				{{#each demos}}
 				<tr>
 					<td>{{title}}</td>
-					<td>{{desc}}</td>
+					<td><span class="desc" title="{{desc}}">{{desc}}</span></td>
 					<td>{{height}}</td>
 					<td>{{meta.time}}</td>
 					<td>

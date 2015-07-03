@@ -1,7 +1,25 @@
 
 <div id="note-list" page class="page">
-	<div class="list-wrap" style="height: 800px">
-		
+	<div class="box-wrap" opacity-box>
+		<div class="box" bindonce ng-repeat="o in data.list">
+			<a ng-href="/article/{{o._id}}">
+				<div class="title">
+					<h3 ng-bind="o.title"></h3>
+				</div>
+				<div class="body">
+					<p ng-bind="o.desc"></p>
+				</div>
+				<div class="foot">
+					<div class="type">{{ o.type == 'zhuan' ? '转载' : '原创' }}</div>
+					<div class="time" ng-bind="o.time"></div>
+				</div>
+			</a>
+		</div>
+	</div>
+
+	<div class="paging-wrap">
+		<span bindonce ng-repeat="o in data.paging" class="{{o.active ? 'active' : ''}}"
+		ng-click="fnpaging(o.page)">{{o.text}}</span>
 	</div>
 </div>
 
@@ -10,10 +28,10 @@
 		<p>标签</p>
 	</div>
 	<hr>
-	<div class="tag {{$index == data.class? 'active': ''}}" ng-repeat="o in data.tags" ng-click=tagFilter(o)>
+	<div class="tag {{o.active ? 'active' : ''}}" bindonce ng-repeat="o in data.category" ng-click="tagFilter(o)">
 		<span class="triangle"></span>
 		<span class="doc"></span>
-		<span class="text">{{o}}</span>
-		<span class="num">{{$index}}</span>
+		<span class="text">{{o.name}}</span>
+		<span class="num">{{o.length}}</span>
 	</div>
 </div>

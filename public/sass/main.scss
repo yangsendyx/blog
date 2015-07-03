@@ -36,7 +36,6 @@ ul {
 canvas{
 	position: fixed;
 	width: 100%;
-	@include filter( blur(2px) );
 }
 
 .wrap {
@@ -309,7 +308,99 @@ canvas{
 }
 
 #note-list {
-	@include background-image( linear-gradient(rgba(255, 255, 255, .85), rgba(187, 187, 187, .85)) );
+	// @include background-image( linear-gradient(rgba(255, 255, 255, .85), rgba(187, 187, 187, .85)) );
+	.box-wrap{
+		@include pie-clearfix();
+		.box{
+			float: left;
+			width: 31%;
+			margin-left: 1%;
+			margin-right: 1%;
+			margin-bottom: 4%;
+			@include box-shadow(0 0 10px #333);
+			@include transition(all, .3s);
+			&:hover {
+				@include box-shadow(0 0 20px #000);
+			}
+			a{
+				text-decoration: none;
+			}
+			.title{
+				height: 38px;
+				background: rgba(255, 255, 255, .85);
+				h3{
+					margin: 0;
+					line-height: 38px;
+					text-align: center;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					color: #333;
+				}
+			}
+			.body {
+				height: 260px;
+				background: rgba(150, 150, 150, .85);
+				color: #ddd;
+				p{
+					margin: 0;
+					box-sizing: border-box;
+					line-height: 28px;
+					padding: 6px 10px;
+					text-indent: 36px;
+				}
+			}
+			.foot{
+				height: 36px;
+				line-height: 36px;
+				background: rgba(255, 255, 255, .85);
+				@include pie-clearfix();
+				> *{
+					color: #555;
+				}
+				.type{
+					float: left;
+					margin-left: 10px;
+				}
+				.time{
+					float: right;
+					margin-right: 10px;
+				}
+			}
+		}
+	}
+	.paging-wrap {
+		height: 56px;
+		@include background-image( linear-gradient(rgba(255, 255, 255, .85), rgba(187, 187, 187, .85)) );
+		text-align: center;
+		@include border-radius(5px);
+		span {
+			display: inline-block;
+			margin-left: 22px;
+			&:last-child {
+				margin-right: 22px;
+			}
+			margin-top: 13px;
+			padding: 4px 14px;
+			cursor: pointer;
+			@include background-image( linear-gradient(rgba(180, 180, 180, 1), rgba(140, 140, 140, 1)) );
+			color: #fff;
+			@include border-radius(2px);
+			@include box-shadow(0 1px 2px #333);
+			&:hover {
+				@include background-image( linear-gradient(rgba(190, 190, 190, 1), rgba(150, 150, 150, 1)) );
+			}
+		}
+		span.active {
+			@include background-image( linear-gradient(rgba(160, 160, 160, 1), rgba(120, 120, 120, 1)) );
+			@include box-shadow(0 1px 10px #333 inset);
+			cursor: default;
+			@include border-radius(4px);
+			&:hover {
+				@include background-image( linear-gradient(rgba(160, 160, 160, 1), rgba(120, 120, 120, 1)) );
+			}
+		}
+	}
 }
 .tag-wrap{
 	position: absolute;
@@ -484,7 +575,7 @@ canvas{
 				.line{
 					width: 2px;
 					height: 100%;
-					top: 0;
+					top: 6px;
 					position: absolute;
 					left: 30px;
 					@include background-image( linear-gradient(rgba(187, 187, 187, .85), rgba(255, 255, 255, .85)) );
@@ -520,12 +611,6 @@ canvas{
 								border-color: transparent transparent rgba(255,255,255,.85) transparent;
 								top: -20px;
 								left: 100px;
-							}
-							.name {
-								font-size: 14px;
-							}
-							.time {
-								font-size: 12px;
 							}
 						}
 						.img{
@@ -565,8 +650,11 @@ canvas{
 							span{
 								display: inline-block;
 							}
+							.name{
+								font-size: 14px;
+							}
 							.time{
-								margin-left: 10px;
+								margin-left: 6px;
 								font-size: 12px;
 								color: #999;
 							}
@@ -616,8 +704,35 @@ canvas{
 			}
 			.bot{
 				.triangle{
-					top: -32px;
+					top: -31px;
 					border-color: transparent transparent rgba(255,255,255,1) transparent;
+				}
+				.page-btn-wrap{
+					height: 100%;
+					text-align: center;
+					span {
+						display: inline-block;
+						padding: 4px 10px;
+						@include background-image( linear-gradient(rgba(180, 180, 180, 1), rgba(140, 140, 140, 1)) );
+						margin-left: 8px;
+						color: #fff;
+						font-size: 14px;
+						cursor: pointer;
+						margin-top: 10px;
+						@include box-shadow(0 1px 2px #333);
+						@include border-radius(2px);
+						&:hover {
+							@include background-image( linear-gradient(rgba(190, 190, 190, 1), rgba(150, 150, 150, 1)) );
+						}
+					}
+					span.active{
+						@include background-image( linear-gradient(rgba(160, 160, 160, 1), rgba(120, 120, 120, 1)) );
+						@include box-shadow(0 1px 10px #333 inset);
+						cursor: default;
+						&:hover {
+							@include background-image( linear-gradient(rgba(160, 160, 160, 1), rgba(120, 120, 120, 1)) );
+						}
+					}
 				}
 			}
 		}
@@ -668,11 +783,21 @@ canvas{
 							color: #fff;
 							cursor: pointer;
 							margin-right: 16px;
+							@include box-shadow(0 1px 2px #333);
+							@include border-radius(4px);
 							&:nth-of-type(1){
-								background-color: rgba(81, 112, 145, .85);
+								@include background-image( linear-gradient(rgba(81, 112, 145, .85), rgba(61, 92, 125, .85)) );
+								// background-color: rgba(81, 112, 145, .85);
+								&:hover {
+									@include background-image( linear-gradient(rgba(101, 132, 165, .85), rgba(81, 112, 145, .85)) );
+								}
 							}
 							&:nth-of-type(2){
-								background-color: rgba(96, 133, 80, .85);
+								@include background-image( linear-gradient(rgba(110, 131, 35, .85), rgba(90, 111, 15, .85)) );
+								// background-color: rgba(96, 133, 80, .85);
+								&:hover {
+									@include background-image( linear-gradient(rgba(130, 151, 55, .85), rgba(110, 131, 35, .85)) );
+								}
 							}
 						}
 					}

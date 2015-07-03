@@ -29,6 +29,16 @@ app.run(['$rootScope', '$location', function($rootScope, $location) {
 app.config(['$stateProvider', '$urlRouterProvider', function($state, $url) {
 	$url.otherwise('/').when('', '/');
 
+	var tempDemo = '<div id="demo" page class="page">'+
+						'<div class="pubul-wrap" pubuliu>'+
+							'<section></section>'+
+							'<section></section>'+
+							'<section></section>'+
+						'</div>'+
+					'</div>';
+
+	
+
 	$state.state('index', {
 		url: '/',
 		templateUrl: 'views/index.html'
@@ -42,7 +52,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function($state, $url) {
 		controller: 'ctrl-note'
 	}).state('demo', {
 		url: '/demo',
-		templateUrl: 'views/demo.html',
+		template: tempDemo,
 		controller: 'ctrl-demo'
 	}).state('message', {
 		url: '/message',

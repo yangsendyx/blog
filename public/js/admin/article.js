@@ -35,7 +35,7 @@ $(function() {
 	if( choiceRadio == '原创' ) $radio.eq(1).trigger('click');
 
 	var $title = $('#title');
-	var $desc = $('#desc');
+	// var $desc = $('#desc');
 
 	if( dataArticle ) {
 		ue.addListener("ready", function () {
@@ -45,12 +45,14 @@ $(function() {
 
 	$send.click(function() {
 		var title = $title.val();
-		var desc = $desc.val();
+		// var desc = $desc.val();
 		var category = $category.val();
 		var newCateBo = false;
 		var path = '';
 		var name = '';
 		var con = ue.getContent();
+		var desc = ue.getContentTxt().slice(0, 138);
+		desc += '...';
 		var article = '';
 		var id = $pathText.data('id');
 
@@ -64,12 +66,12 @@ $(function() {
 		if( type == '转载' ) {
 			path = $pathText.find('input').val();
 			name = $nameText.find('input').val();
-			article += '<p>本文章转载自<a href="'+path+'"> '+name+' </a>，作为学习之用，但尚未征得原作者同意，若您觉得有任何不妥之处，请在评论中回复，并留下您的联系方式，我会在第一时间进行处理，谢谢！</p>';
+			article += '<p class="avow">本文章转载自<a href="'+path+'"> '+name+' </a>，仅作为学习之用，但尚未征得原作者同意，若您觉得有任何不妥之处，请在评论中回复，并留下您的联系方式，我会在第一时间进行处理，谢谢！</p>';
 		}
 		article += con;
 
 		if( !title ) return alert('请填写标题');
-		if( !desc ) return alert('请填写描述');
+		// if( !desc ) return alert('请填写描述');
 		if( !category ) return alert('请填写或选择分类');
 		if( type == 'zhuan' ) {
 			if( !name ) return alert('请填写被转载者名称');
@@ -88,7 +90,7 @@ $(function() {
 			article: article,
 			id: id
 		};
-
+		
 		post('/admin/update/article', data, function(data) {
 			window.location.href = '/admin/article/list';
 		});

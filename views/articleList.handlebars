@@ -1,3 +1,8 @@
+{{#section 'link'}}
+<style type="text/css">
+	.desc{ display: inline-block; max-width: 150px;white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+</style>
+{{/section}}
 
 {{> nav}}
 
@@ -27,7 +32,7 @@
 				{{#each articles}}
 				<tr>
 					<td>{{title}}</td>
-					<td>{{desc}}</td>
+					<td><span class="desc" title="{{desc}}">{{desc}}</span></td>
 					<td>{{category.name}}</td>
 					<td>{{type}}</td>
 					<td>

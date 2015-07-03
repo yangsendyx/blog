@@ -40,6 +40,10 @@
 		</div>
 		<div class="bar bot">
 			<span class="triangle"></span>
+			<div class="page-btn-wrap">
+				<span bindonce ng-repeat="o in data.paging" class="{{o.active?'active':''}}"
+				ng-click="fnPaging(o.page)">{{o.text}}</span>
+			</div>
 		</div>
 	</section>
 	<section>

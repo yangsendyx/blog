@@ -26,6 +26,8 @@ module.exports = function(app) {
 
 	// 文章API
 	app.get('/article/list', article.list);
+	app.get('/article/category', article.category);
+	app.get('/article/:id', article.article);
 
 
 	// demoAPI

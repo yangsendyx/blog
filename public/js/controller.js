@@ -18,6 +18,7 @@ ctrl.controller('myCtrl', ['$scope', '$rootScope', '$timeout', 'ysHttp', functio
 
 	$scope.loginBo = false;
 	$scope.dialogBo = false;
+	// localStorage.removeItem('info');
 	var info = localStorage.getItem('info');
 	var name = '';
 	var qq = '';
@@ -45,6 +46,10 @@ ctrl.controller('myCtrl', ['$scope', '$rootScope', '$timeout', 'ysHttp', functio
 				if( !$scope.msg.nk ) {
 					this.showDialog('亲，至少留个昵称呗 ^_^');
 					return;
+				} else if( this.checkLen($scope.msg.nk) ) {
+					$scope.msg.nk = '';
+					this.showDialog('亲，昵称太长了哦，中文最多6位，英文最多12位。咱昵称就改短点呗 ^_^');
+					return;
 				} else {
 					var json = { name: $scope.msg.nk, qq: $scope.msg.qq };
 					localStorage.setItem('info', angular.toJson( json ) );
@@ -62,7 +67,7 @@ ctrl.controller('myCtrl', ['$scope', '$rootScope', '$timeout', 'ysHttp', functio
 				$scope.msg.info.msg = '';
 				$scope.msg.info.from = '';
 				$scope.msg.info.to = '';
-				$scope.msg.info.id = '';
+				// $scope.msg.info.id = '';
 
 				if( /message/g.test($scope.msg.url) ) {
 					$scope.watchData.msg++;
@@ -71,29 +76,100 @@ ctrl.controller('myCtrl', ['$scope', '$rootScope', '$timeout', 'ysHttp', functio
 				}
 				if( !bo ) $scope.fn.hideLogin();
 			});
+		},
+		checkLen: function(val) {
+			var len = 0;
+			for (var i = 0; i < val.length; i++) {
+				if (val[i].match(/[^\x00-\xff]/ig) !== null) // 全角
+					len += 2;
+				else
+					len += 1;
+			}
+			return len > 12 ? true: false;
 		}
 	};
 }]);
 
 
 ctrl.controller('ctrl-note-list', ['$scope', '$rootScope', 'ysHttp', function($scope, $root, ajax){
-	$scope.data = {
-		tags: ['全部','html', 'css', 'javascript', 'jquery', 'angular', 'node', 'express', 'nginx'],
-		class: 0
+	$scope.startBo = false;
+	$scope.data = {};
+	$scope.data.type = 'all';
+	$scope.data.category = [];
+	$scope.data.article = {};
+	$scope.data.category.push({ _id: 'all', name: '全部', active: true });
+	var count = 0;
+	$scope.getCategory = function() {
+		ajax.get('/article/category', function(data) {
+			count++; if( count == 2 ) $scope.startBo = true;
+			data = data.data;
+			var len = data.length;
+			var length = 0;
+			for( var i=0; i<len; i++ ) {
+				data[i].artive = false;
+				length += parseInt( data[i].length );
+				$scope.data.category.push( data[i] );
+			}
+			$scope.data.category[0].length = length;
+		});
 	};
 
-	/*$scope.tagFilter = function(name) {
-		console.log(name);
-	};*/
+	$scope.getArticle = function( page, bo, cb ) {
+		page = parseInt( page );
+		var start = (page-1) * 9;
+		var url = '/article/list?start='+start+'&type='+$scope.data.type;
+		document.documentElement.scrollTop = document.body.scrollTop = 0;
+		ajax.get(url, function(data) {
+			count++; if( count == 2 ) $scope.startBo = true;
+			var all = Math.ceil(parseInt(data.length) / 9);
+			var current = page;
+			$scope.data.paging = makePaging(all, current);
+			$scope.data.list = changeTime(data.data);
+			if( bo ) $scope.data.opacitBo = false;
+			if( cb ) cb();
+		});
+	};
+	$scope.getCategory();
+	$scope.getArticle(1);
+	$scope.data.opacitBo = false;
 
-	$scope.startBo = true;
-	/*$root.loadingBo = true;
-	ajax.get('/test/api', function(data) {
-		$scope.startBo = true;
-		$root.loadingBo = false;
-		console.log( data );
-	});*/
+	$scope.fnpaging = function( page ) {
+		page = parseInt(page);
+		$scope.data.opacitBo = true;
+		setTimeout(function() {
+			$scope.getArticle(page, true);
+		}, 400);
+	};
+
+	$scope.tagFilter = function(obj) {
+		if( obj._id != $scope.data.type ) {
+			$scope.data.type = obj._id;
+			$scope.data.opacitBo = true;
+			setTimeout(function() {
+				$scope.getArticle(1, true, function() {
+					var len = $scope.data.category.length;
+					for( var i=0; i<len; i++ ) {
+						$scope.data.category[i].active = false;
+						if( $scope.data.category[i]._id == $scope.data.type ) {
+							$scope.data.category[i].active = true;
+						}
+					}
+				});
+			}, 400);
+		}
+	};
 }]);
+
+function changeTime(data) {
+	var len = data.length;
+	for( var i=0; i<len; i++ ) {
+		var now = new Date(data[i].meta.updateAt);
+		var str = now.getFullYear() + '-' + (now.getMonth()+1) + '-' + now.getDate();
+		str += ' ' + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
+		data[i].time = str;
+	}
+	return data;
+}
 
 
 ctrl.controller('ctrl-note', ['$scope', '$rootScope', '$timeout', function($scope, $root, $timeout){
@@ -128,30 +204,69 @@ ctrl.controller('ctrl-demo', ['$scope', '$rootScope', 'ysHttp', function($scope,
 }]);
 
 
+function makePaging(all, current) {
+	var arr = [];
+	var loop = function(min, max) {
+		for( var i=min; i<max; i++ ) {
+			var json, active = false;
+			if( (i+1) == current ) active = true;
+			json = { text: (i+1), page: (i+1), active: active };
+			arr.push( json );
+		}
+	};
+
+	if( all <= 5 ) {
+		loop( 0, all );
+	} else {
+		if( current != 1 ) {
+			arr.push({ text: '首页', page: 1, active: false });
+			arr.push({ text: '上一页', page: (current-1), active: false });
+		}
+
+		if( current < 3 ) {
+			loop( 0, 5 );
+		} else if( current > all-2 ) {
+			loop( all-5, all );
+		} else {
+			arr.push({ text: (current-2), page: (current-2), active: false });
+			arr.push({ text: (current-1), page: (current-1), active: false });
+			arr.push({ text: current, page: current, active: true });
+			arr.push({ text: (current+1), page: (current+1), active: false });
+			arr.push({ text: (current+2), page: (current+2), active: false });
+		}
+
+		if( current != all ) {
+			arr.push({ text: '下一页', page: (current+1), active: false });
+			arr.push({ text: '尾页', page: all, active: false });
+		}
+	}
+	return arr;
+}
+
+
 ctrl.controller('ctrl-message', ['$scope', '$rootScope', 'ysHttp',  function($scope, $root, ajax){
 	$scope.startBo = true;
 	$scope.msg.url = '/message/save';
 	
 	$scope.data = {};
 	$scope.data.msgs = [];
-	/*$scope.data.extendMsgs = [];
-	var extendBo = true;*/
 	$scope.ctrlOpenUlBo = false;
+	$scope.replyPageNum = 1;
 	$scope.getMsg = function( start, bo ) {
-		ajax.get('/message/list?start='+start, function(data) {
+		start = parseInt(start);
+		var start2 = (start -1) * 6;
+		ajax.get('/message/list?start='+start2, function(data) {
 			$scope.startBo = true;
-			$scope.data.len = data.len;
+			$scope.data.len = data.length;
 			$scope.data.msgs = data.msgs;
+			var all = Math.ceil(data.length / 6);
+			var current = start2 / 6 + 1;
+			$scope.data.currentPage = current;
+			$scope.data.paging = makePaging( all, current );
 			if( bo ) $scope.ctrlOpenUlBo = true;
 		});
 	};
-	$scope.getMsg( 0 );
-
-	/*$scope.extendData = function() {
-		$scope.data.extendMsgs = angular.copy($scope.data.msgs, []);
-		$scope.ctrlHeightBo = false;
-	};*/
-
+	$scope.getMsg( 1 );
 	
 	$scope.autoFocus = true;
 	$scope.comment = function(to, id) {
@@ -175,8 +290,16 @@ ctrl.controller('ctrl-message', ['$scope', '$rootScope', 'ysHttp',  function($sc
 		if( !$scope.msg.nk ) {
 			$scope.fn.showLogin();
 		} else {
-			if( !$scope.msg.info.id ) $scope.replyPageNum = 0;
+			if( !$scope.msg.info.id ) $scope.replyPageNum = 1;
 			$scope.fn.confirm(true);
+		}
+	};
+
+	$scope.fnPaging = function(page) {
+		page = parseInt( page );
+		if( page != $scope.data.currentPage ) {
+			$scope.replyPageNum = page;
+			$scope.ctrlHeightBo = true;
 		}
 	};
 
