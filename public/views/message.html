@@ -1,7 +1,6 @@
 
 <div id="message" class="page" page>
 	<section>
-		
 		<div class="bar top">
 			<span class="triangle"></span>
 			<p>留言回复</p>
@@ -16,7 +15,7 @@
 					<div class="info-wrap">
 						<div class="title">
 							<span class="name">{{o.from}}</span>
-							<span class="time">[{{o.time}}]</span>
+							<span class="time">[{{o.time | initTime}}]</span>
 							<span class="comment" ng-click="comment(o.from, o.id)">回复</span>
 						</div>
 						<div class="body">{{o.msg}}</div>
@@ -29,7 +28,7 @@
 						<div class="info-wrap">
 							<div class="title">
 								<span class="name">{{r.from}} 回复 {{r.to}}</span>
-								<span class="time">[2015-07-11 18:11:11]</span>
+								<span class="time">[{{r.time | initTime}}]</span>
 								<span class="comment" ng-click="comment(r.from, o.id)">回复</span>
 							</div>
 							<div class="body">{{r.msg}}</div>

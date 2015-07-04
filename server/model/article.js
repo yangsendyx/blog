@@ -11,7 +11,7 @@ var ArticleSchema = new Schema({
 	name: String,
 	type: {
 		type: String,
-		default: 'zhuan'
+		default: '转载'
 	},
 	category: {
 		type: ObjectId,

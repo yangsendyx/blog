@@ -177,7 +177,7 @@ direc.directive('delay', ['ysAnimate',  function(ysA){
 	return {
 		link: function($scope, iElm, iAttrs) {
 			var clientW = CLIENT_W;
-			var clientH = CLIENT_H+42;
+			var clientH = CLIENT_H+10;
 			var can = document.getElementById('canvas');
 			can.width = clientW;
 			can.height = clientH;
@@ -272,16 +272,21 @@ direc.directive('page', ['$timeout', '$state', '$rootScope', 'ysAnimate', functi
 
 			$scope.$watch('pagename', function(newValue, oldValue, scope) {
 				if( newValue != $root.oldPage ) {
-					var fn = function() {
-						$root.oldPage = newValue;
-						$state.go(newValue);
-					};
-					animate.transform( iElm, {target: { translate: [distance, 0]}, time: 700, fx: 'easeOutStrong', fn: fn});
+					animate.transform( iElm, {target: { translate: [distance, 0]}, time: 700, fx: 'easeOutStrong'});
 					animate.move(iElm, {target: {opacity: 0}, time: 500});
 					if( tag.length ) {
 						animate.transform( tag, {target: { translate: [0, -300]}, time: 700, fx: 'easeOutStrong'});
 						animate.move(tag, {target: {opacity: 0}, time: 700});
 					}
+
+					$timeout(function() {
+						$root.oldPage = newValue;
+						if( /^note$/.test(newValue) ) {
+							$state.go(newValue, {'id': $root.articleID});
+						} else {
+							$state.go(newValue);
+						}
+					}, 700);
 				}
 			});
 
@@ -323,7 +328,6 @@ direc.directive('nav', ['$rootScope', function($root){
 				for( var i=0; i<li.length; i++ ) {
 					angular.element(li[i]).removeClass('active');
 				}
-
 				if( str == '/' || str == 'index' || str === '' ) {
 					angular.element(li[0]).addClass('active');
 				} else if( /note/g.test(str) ) {
@@ -341,6 +345,9 @@ direc.directive('nav', ['$rootScope', function($root){
 			$root.$on('$locationChangeStart', function(event, newUrl) {
 				var newArr = newUrl.split('/');
 				var newSate = newArr[newArr.length-1] || 'index';
+				if( newUrl.indexOf('note/') != -1 ) {
+					newSate = newArr[newArr.length-2];
+				}
 				run( newSate );
 			});
 		}
@@ -503,29 +510,40 @@ direc.directive('signIn', ['ysAnimate', function(animate){
 		link: function($scope, iElm, iAttrs) {
 			var h = iElm[0].offsetHeight;
 			var late = CLIENT_H/2 + h;
+			var t = CLIENT_H/2-h/2;
 			var blur;
-			iElm.css({
+			/*iElm.css({
 				'top': CLIENT_H/2-h/2 + 'px',
 				'-webkit-transform': 'translate(0px, '+(-late)+'px)',
 				'-moz-transform': 'translate(0px, '+(-late)+'px)',
 				'-ms-transform': 'translate(0px, '+(-late)+'px)',
 				'-o-transform': 'translate(0px, '+(-late)+'px)',
 				'transform': 'translate(0px, '+(-late)+'px)',
+			});*/
+			iElm.css({
+				top: t + 'px',
+				opacity: 0,
+				display: 'none'
 			});
-			
 			$scope.$watch('loginBo', function(newVal, oldVal) {
 				if( newVal != oldVal ) {
 					if( newVal ) {
 						iElm.find('input').eq(0)[0].focus();					
-						animate.transform(iElm, {
+						/*animate.transform(iElm, {
 							target: { translate: [0, 0] },
 							time: 700, fx: 'backOut'
-						});
+						});*/
+						iElm.css('display', 'block');
+						animate.move(iElm, { target: {opacity: 1}, time: 400});
 					} else {
-						animate.transform(iElm, {
+						/*animate.transform(iElm, {
 							target: { translate: [0, -late] },
 							time: 700, fx: 'easeOutStrong'
-						});
+						});*/
+						animate.move(iElm, { target: {opacity: 0}, time: 400});
+						setTimeout(function() {
+							iElm.css('display', 'none');
+						}, 400);
 					}
 				}
 			});
@@ -536,7 +554,7 @@ direc.directive('signIn', ['ysAnimate', function(animate){
 
 direc.directive('dialog', ['$timeout', 'ysAnimate', function($timeout, animate){
 	return {
-		template: '<p bindonce>{{msg.dialog}}</p>',
+		template: '<p bindonce ng-bind-html="msg.dialog | to_trusted"></p>',
 		link: function($scope, iElm, iAttrs) {
 			iElm.css({ display: 'none', opacity: 0, top: CLIENT_H/2 + 'px' });
 			$scope.$watch('dialogBo', function(newVal, oldVal) {
@@ -551,8 +569,8 @@ direc.directive('dialog', ['$timeout', 'ysAnimate', function($timeout, animate){
 					var run = function() { iElm.css('display', 'none'); };
 					$timeout(function() {
 						animate.move(iElm, { target: { opacity: 0 }, time: 400, fn: run });
-					}, 3000);
-					$timeout(function() { $scope.dialogBo = false; }, 3400);
+					}, 2600);
+					$timeout(function() { $scope.dialogBo = false; }, 3000);
 				}
 			});
 		}
@@ -628,3 +646,23 @@ direc.directive('opacityBox', ['ysAnimate', function(animate){
 		}
 	};
 }]);
+
+
+direc.directive('getCommentTop', function(){
+	return {
+		link: function($scope, iElm, iAttrs) {
+			var textarea = iElm.find('textarea');
+			$scope.$watch('startBo', function(newVal) {
+				if( newVal ) {
+					setTimeout(function() {
+						$scope.data.texareaT = iElm[0].offsetTop - 50;
+					}, 50);
+				}
+			});
+
+			$scope.$watch('data.autoFocus', function(newVal) {
+				if( newVal ) textarea[0].focus();
+			});
+		}
+	};
+});

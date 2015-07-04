@@ -269,29 +269,22 @@ service.factory('ysHttp', ['$rootScope', '$http', function($root, $http) {
 				This.error( data );
 			});
 		},
-		/*put: function(url, data, cb) {
-
-		},
-		delete: function(url, cb) {
-
-		},
-		jsonp: function(url, cb) {
-
-		},*/
 
 		success: function(data, cb) {
 			this.after();
 			if( data.type == 'ok' ) return cb( data );
 
-			if( data.info === '' ) {
-				console.log('调用Dialog');
+			if( /read/.test(data.info) ) {
+				console.log('读取数据错误');
+			} else if( /save/.test(data.info) ) {
+				console.log('存储数据错误');
 			} else {
-				console.log('调用Dialog');
+				console.log('服务器错误：' + data.info);
 			}
 		},
 		error: function(data) {
 			this.after();
-			console.log('调用Dialog');
+			console.log('通信失败！');
 		}
 	};
 }]);

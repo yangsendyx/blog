@@ -21,7 +21,7 @@ exports.list = function(req, res) {
 				from: el.from,
 				qq: el.qq || '',
 				msg: el.msg,
-				time: moment(el.time).format('YYYY-MM-DD HH:mm:ss'),
+				time: el.time
 			};
 			var replyLen = el.reply.length;
 			if( replyLen > 5 ) {
@@ -29,9 +29,7 @@ exports.list = function(req, res) {
 			} else {
 				json.reply = el.reply;
 			}
-			_.each(json.reply, function(el, i) {
-				el.time = moment(el.time).format('YYYY-MM-DD HH:mm:ss');
-			});
+			
 			data.push(json);
 		});
 
@@ -52,13 +50,14 @@ exports.save = function(req, res) {
 				from: data.from,
 				to: data.to,
 				qq: data.qq,
-				msg: data.msg
+				msg: data.msg,
+				time: Date.now()
 			};
 			msg.reply.push( newData );
 			msg.save(function(err, msg) {
 				if( err ) {
 					console.log( err );
-					return res.json({ type: 'fail', info: 'read message error' });
+					return res.json({ type: 'fail', info: 'save message error' });
 				}
 				res.json({ type: 'ok' });
 			});
@@ -67,7 +66,8 @@ exports.save = function(req, res) {
 		new Msg({
 			from: data.from,
 			msg: data.msg,
-			qq: data.qq
+			qq: data.qq,
+			time: Date.now()
 		}).save(function(err, msg) {
 			if( err ) {
 				console.log( err );

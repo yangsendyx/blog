@@ -1,4 +1,49 @@
 
-<div id="note" page>
-	
-</div>
+<div id="note" class="page" page>
+	<div class="article">
+		<div class="title">
+			<h2>{{ data.article.title }}</h2>
+			<p>分类：{{data.article.type == 'zhuan' || '转' ? '转载' : '原创' }} &nbsp;&nbsp;&nbsp;
+			更新时间：{{data.article.meta.updateAt | initTime}}</p>
+		</div>
+		<div class="body" bindonce ng-bind-html="data.article.article | to_trusted"></div>
+	</div>
+	<div class="comment" get-comment-top>
+		<div class="text">
+			<textarea ng-model="msg.info.msg" placeholder="请输入评论内容" ng-blur="fnBlur()"></textarea>
+			<span class="commentInfo" ng-show="msg.info.to">回复 {{msg.info.to}}</span>
+			<div class="button"  ng-click="subMsg()">发布</div>
+			<div class="button" ng-show="msg.info.to" ng-click="hideBtn()">取消回复</div>
+		</div>
+		<div class="reply">
+			<div class="box" bindonce ng-repeat="o in data.reply">
+				<div class="img">
+					<img ng-src="{{o.qq?'http://q4.qlogo.cn/g?b=qq&nk='+o.qq+'&s=3':'/img/default.jpg'}}">
+				</div>
+				<div class="info-wrap">
+					<div class="title">
+						<span class="name">{{o.from}}</span>
+						<span class="time">[{{o.time | initTime}}]</span>
+						<span class="commentBtn" ng-click="fnComment(o.from, o._id)">回复</span>
+					</div>
+					<div class="body">{{o.msg}}</div>
+					<div class="replyBox" bindonce ng-repeat="r in o.reply">
+						<div class="box">
+							<div class="img">
+								<img ng-src="{{r.qq?'http://q4.qlogo.cn/g?b=qq&nk='+r.qq+'&s=3':'/img/default.jpg'}}">
+							</div>
+							<div class="info-wrap">
+								<div class="title">
+									<span class="name">{{r.from}} 回复 {{o.from}}</span>
+									<span class="time">[{{r.time | initTime}}]</span>
+									<span class="commentBtn" ng-click="fnComment(r.from, o._id)">回复</span>
+								</div>
+								<div class="body">{{r.msg}}</div>
+							</div>
+						</div>
+					</div><!-- replyBox end -->
+				</div>
+			</div><!-- box end -->
+		</div><!-- reply end -->
+	</div><!-- comment end -->
+</div><!-- page end -->

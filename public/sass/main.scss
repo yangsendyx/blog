@@ -36,6 +36,7 @@ ul {
 canvas{
 	position: fixed;
 	width: 100%;
+	-webkit-filter: blur(2px);
 }
 
 .wrap {
@@ -54,7 +55,7 @@ canvas{
 	line-height: 50px;
 	opacity: 0;
 	@include box-shadow(#333 0 0 10px);
-	@include background-image(linear-gradient(rgba(255,255,255,.85), rgba(187,187,187,.85)));
+	@include background-image(linear-gradient(rgba(255,255,255,.95), rgba(187,187,187,.95)));
 	@include transition(opacity .4s);
 	
 	.bar{
@@ -79,7 +80,7 @@ canvas{
 
 			&:hover {
 				color: #f60;
-				@include text-shadow(4px 4px 4px #888);
+				@include text-shadow(4px 4px 4px #777);
 			}
 		}
 		.active {
@@ -88,6 +89,7 @@ canvas{
 		}
 	}
 }
+// 导航占位
 .navpos{
 	height: 50px;
 	width: 100%;
@@ -134,7 +136,7 @@ canvas{
 #signIn {
 	width: 300px;
 	@include background-image( linear-gradient(rgba(255, 255, 255, 1), rgba(187, 187, 187, 1)) );
-	position: absolute;
+	position: fixed;
 	left: 50%;
 	margin-left: -150px;
 	z-index: 5;
@@ -192,7 +194,7 @@ canvas{
 
 // dialog
 #dialog {
-	position: absolute;
+	position: fixed;
 	width: 200px;
 	left: 50%;
 	margin-left: -120px;
@@ -308,7 +310,6 @@ canvas{
 }
 
 #note-list {
-	// @include background-image( linear-gradient(rgba(255, 255, 255, .85), rgba(187, 187, 187, .85)) );
 	.box-wrap{
 		@include pie-clearfix();
 		.box{
@@ -355,6 +356,7 @@ canvas{
 				line-height: 36px;
 				background: rgba(255, 255, 255, .85);
 				@include pie-clearfix();
+				@include box-shadow(0 0 10px #333);
 				> *{
 					color: #555;
 				}
@@ -411,7 +413,6 @@ canvas{
 	background-color: rgba(255,255,255,.85);
 	@include box-shadow(0 0 10px #333);
 	padding-bottom: 16px;
-	
 	p {
 		@include box-sizing(border-box);
 		padding-left: 26px;
@@ -427,7 +428,13 @@ canvas{
 		margin: 6px 2px;
 		cursor: pointer;
 		position: relative;
-
+		&:hover .triangle{
+			border-color: transparent #555 transparent transparent;
+		}
+		&:hover .text, &:hover .num{
+			color: #fff;
+			background: #555;
+		}
 		span{
 			display: inline-block;
 			float: left;
@@ -437,12 +444,14 @@ canvas{
 			border-width: 12px;
 			border-style: solid;
 			border-color: transparent #aaa transparent transparent;
+			@include transition(all .3s);
 		}
 		.text {
 			height: 24px;
 			line-height: 24px;
 			padding-left:10px;
 			background: #aaa;
+			@include transition(all .3s);
 		}
 		.num {
 			height: 24px;
@@ -451,6 +460,7 @@ canvas{
 			background: #aaa;
 			padding: 0 6px;
 			font-size: 12px;
+			@include transition(all .3s);
 		}
 		.doc{
 			position: absolute;
@@ -461,6 +471,9 @@ canvas{
 			background: #ccc;
 			@include border-radius(50%);
 		}
+	}
+	.active{
+		cursor: default;
 	}
 	.active .triangle{
 		border-color: transparent #de9638 transparent transparent !important;
@@ -476,6 +489,18 @@ canvas{
 		color: #ddd !important;
 		background: #de9638;
 	}
+	.active:hover .triangle {
+		border-color: transparent #de9638 transparent transparent !important;
+	}
+	.active:hover .text, .active:hover .num{
+		background: #de9638;
+	}
+	.active:hover .text{
+		color: #fff !important;
+	}
+	.active:hover .num{
+		color: #ddd !important;
+	}
 }
 .tag-wrap.tag-fix {
 	position: fixed;
@@ -483,8 +508,140 @@ canvas{
 }
 
 #note {
-	@include background-image( linear-gradient(rgba(255, 255, 255, .85), rgba(187, 187, 187, .85)) );
-	height: 1300px;
+	.article {
+		padding: 30px 0;
+		// @include background-image( linear-gradient(rgba(255, 255, 255, .85), rgba(187, 187, 187, .85)) );
+		@include box-shadow(0 0 10px #333);
+		background-color: rgba(255,255,255,.85);
+		.title{
+			text-align: center;
+			p{
+				font-size: 14px;
+				color: #888;
+			}
+		}
+		.body {
+			
+		}
+	}
+	.comment {
+		@include box-shadow(0 0 10px #333);
+		background-color: rgba(255, 255, 255, .8);
+		padding: 30px 0;
+		margin-top: 50px;
+		margin-bottom: 30px;
+		> *{
+			width: 80%;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		.text{
+			@include legacy-pie-clearfix();
+			textarea {
+				resize: none;
+				height: 180px;
+				width: 100%;
+				border: 1px solid #eee;
+				background-color: rgba(255,255,255,.85);
+				outline: none;
+				box-sizing: border-box;
+				padding: 20px;
+				@include transition(all .3s);
+				// @include box-shadow(0 0 4px #555);
+				background-color: rgba(255,255,255,.75);
+				&:focus {
+					@include box-shadow(0 0 10px #333);
+				}
+			}
+			.commentInfo{
+				display: inline-block;
+				margin-top: 20px;
+				padding-left: 30px;
+				color: #999;
+				font-size: 14px;
+			}
+			.button{
+				padding: 8px 14px;
+				color: #fff;
+				text-align: center;
+				margin-top: 10px;
+				display: inline-block;
+				float: right;
+				cursor: pointer;
+				@include border-radius(4px);
+				@include box-shadow(0 1px 2px #333);
+				&:nth-of-type(1) {
+					@include background-image( linear-gradient(rgba(81, 112, 145, .85), rgba(61, 92, 125, .85)) );
+					&:hover {
+						@include background-image( linear-gradient(rgba(101, 132, 165, .85), rgba(81, 112, 145, .85)) );
+					}
+				}
+				&:nth-of-type(2) {
+					margin-right: 16px;
+					@include background-image( linear-gradient(rgba(110, 131, 35, .85), rgba(90, 111, 15, .85)) );
+					&:hover {
+						@include background-image( linear-gradient(rgba(130, 151, 55, .85), rgba(110, 131, 35, .85)) );
+					}
+				}
+			}
+		}
+		.reply{
+			margin-top: 40px;
+			border-top: 1px solid #aaa;
+			.box{
+				margin-top:  10px;
+				padding: 10px 0 30px;
+				border-bottom: 1px solid #aaa;
+				@include legacy-pie-clearfix();
+				.img{
+					margin-top: 10px;
+					float: left;
+					width:  15%;
+					text-align: center;
+					img{
+						vertical-align: top;
+						width: 50%;
+						@include border-radius(10px);
+						@include box-shadow(0 2px 6px #555);
+					}
+				}
+				.info-wrap{
+					float: left;
+					width: 85%;
+					.title{
+						height: 36px;
+						line-height: 36px;
+						border-bottom: 1px solid rgba(180, 180, 180, .5);
+						span{
+							color: #888;
+							display: inline-block;
+						}
+						.time{
+							margin-left: 20px;
+						}
+						.commentBtn{
+							float: right;
+							margin-right: 20px;
+							color: #555;
+							cursor: pointer;
+						}
+					}
+					.body{
+						padding-top: 15px;
+					}
+					.replyBox{
+						margin-top: 20px;
+						margin-left: -30px;
+						border-top: 1px solid rgba(180, 180, 180, .8);
+						.box{
+							border:none;
+							padding-bottom: 0;
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 #demo {
@@ -787,14 +944,12 @@ canvas{
 							@include border-radius(4px);
 							&:nth-of-type(1){
 								@include background-image( linear-gradient(rgba(81, 112, 145, .85), rgba(61, 92, 125, .85)) );
-								// background-color: rgba(81, 112, 145, .85);
 								&:hover {
 									@include background-image( linear-gradient(rgba(101, 132, 165, .85), rgba(81, 112, 145, .85)) );
 								}
 							}
 							&:nth-of-type(2){
 								@include background-image( linear-gradient(rgba(110, 131, 35, .85), rgba(90, 111, 15, .85)) );
-								// background-color: rgba(96, 133, 80, .85);
 								&:hover {
 									@include background-image( linear-gradient(rgba(130, 151, 55, .85), rgba(110, 131, 35, .85)) );
 								}
@@ -819,6 +974,6 @@ canvas{
 #footer {
 	width: 100%;
 	background: #555;
-	height: 300px;
+	height: 200px;
 	margin-top: 20px;
 }

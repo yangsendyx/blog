@@ -16,12 +16,13 @@ function randomNum(big, small) {
 var CLIENT_W = document.documentElement.clientWidth;
 var CLIENT_H = document.documentElement.clientHeight;
 
-var app = angular.module('app', ['ui.router', 'myService', 'myDirective', 'myController']);
+var app = angular.module('app', ['ui.router', 'myService', 'myFilter', 'myDirective', 'myController']);
 
-app.run(['$rootScope', '$location', function($rootScope, $location) {
-	var initPage = $location.path().substring(1);
-	$rootScope.pagename = initPage;
-	$rootScope.oldPage = initPage;
+app.run(['$rootScope', function($rootScope) {
+	$rootScope.pagename = '';
+	$rootScope.oldPage = '';
+
+	$rootScope.articleID = '';
 	$rootScope.loadingBo = false;
 	$rootScope.time = 1000;
 }]);
@@ -47,7 +48,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function($state, $url) {
 		templateUrl: 'views/note-list.html',
 		controller: 'ctrl-note-list'
 	}).state('note', {
-		url: '/note/{id: [a-zA-Z0-9]{12}}',
+		url: '/note/:id',
 		templateUrl: 'views/note.html',
 		controller: 'ctrl-note'
 	}).state('demo', {

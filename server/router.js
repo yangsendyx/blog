@@ -28,6 +28,9 @@ module.exports = function(app) {
 	app.get('/article/list', article.list);
 	app.get('/article/category', article.category);
 	app.get('/article/:id', article.article);
+	app.get('/article/comment/:id', article.comment);
+	// save comment
+	app.post('/article/comment/save/:id', article.save);
 
 
 	// demoAPI

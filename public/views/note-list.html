@@ -2,7 +2,7 @@
 <div id="note-list" page class="page">
 	<div class="box-wrap" opacity-box>
 		<div class="box" bindonce ng-repeat="o in data.list">
-			<a ng-href="/article/{{o._id}}">
+			<a href="javascript:;" ng-click="toggle('note', o._id)">
 				<div class="title">
 					<h3 ng-bind="o.title"></h3>
 				</div>
@@ -10,8 +10,8 @@
 					<p ng-bind="o.desc"></p>
 				</div>
 				<div class="foot">
-					<div class="type">{{ o.type == 'zhuan' ? '转载' : '原创' }}</div>
-					<div class="time" ng-bind="o.time"></div>
+					<div class="type">{{ o.type == 'zhuan' || '转载' ? '转载' : '原创' }}</div>
+					<div class="time">{{ o.meta.updateAt | initTime }}</div>
 				</div>
 			</a>
 		</div>
