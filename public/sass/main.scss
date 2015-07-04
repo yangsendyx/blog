@@ -36,7 +36,7 @@ ul {
 canvas{
 	position: fixed;
 	width: 100%;
-	-webkit-filter: blur(2px);
+	// -webkit-filter: blur(2px);
 }
 
 .wrap {
@@ -318,7 +318,7 @@ canvas{
 			margin-left: 1%;
 			margin-right: 1%;
 			margin-bottom: 4%;
-			@include box-shadow(0 0 10px #333);
+			@include box-shadow(0 0 10px #555);
 			@include transition(all, .3s);
 			&:hover {
 				@include box-shadow(0 0 20px #000);
@@ -356,7 +356,6 @@ canvas{
 				line-height: 36px;
 				background: rgba(255, 255, 255, .85);
 				@include pie-clearfix();
-				@include box-shadow(0 0 10px #333);
 				> *{
 					color: #555;
 				}
@@ -376,6 +375,7 @@ canvas{
 		@include background-image( linear-gradient(rgba(255, 255, 255, .85), rgba(187, 187, 187, .85)) );
 		text-align: center;
 		@include border-radius(5px);
+		@include box-shadow(0 0 10px #333);
 		span {
 			display: inline-block;
 			margin-left: 22px;
@@ -698,7 +698,7 @@ canvas{
 					color: #333;
 					text-decoration: none;
 				}
-				
+				@include box-shadow(0 0 10px #555);
 				&:hover{
 					@include box-shadow(0 0 20px #000);
 				}
