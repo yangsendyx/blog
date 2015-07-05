@@ -11,12 +11,12 @@ module.exports = function(grunt) {
 		},
 
 		watch: {
-			hbs: {
+			/*hbs: {
 				files: ['views/**'],
 				options: {
 					livereload: true
 				}
-			},
+			},*/
 			js: {
 				files: ['server/**'],
 				options: {
@@ -39,10 +39,7 @@ module.exports = function(grunt) {
 					watchedFolders: ['server'],
 					debug: true,
 					delayTime: 1,
-					cwd: __dirname/*,
-					env: {
-						PORT: 3000
-					}*/
+					cwd: __dirname
 				}
 			}
 		},
@@ -52,24 +49,43 @@ module.exports = function(grunt) {
 			options: {
 				logConcurrentOutput: true
 			}
-		}// ,
+		},
 
-		// mochaTest: {
-		// 	options: {
-		// 		reporter: 'spec'
-		// 	},
-		// 	src: ['test/**.js']
-		// }
+		concat: {
+			options: {
+				separator: ';',
+				stripBanners: true
+			},
+			dist: {
+				src: [
+					"./public/js/service.js",
+					"./public/js/filter.js",
+					"./public/js/controller.js",
+					"./public/js/directive.js",
+					"./public/js/main.js"
+				],
+				dest: "./public/js/build/main.js"
+			}
+		},
+
+		uglify: {
+			dist: {
+				files: {
+					'./public/js/build/main.min.js': './public/js/build/main.js'
+				}
+			}
+		}
 	});
 
 
 	grunt.loadNpmTasks('grunt-contrib-compass');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-contrib-concat');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-nodemon');
 	grunt.loadNpmTasks('grunt-concurrent');
-	// grunt.loadNpmTasks('grunt-mocha-test');
 
 	grunt.option('force', true);
 	grunt.registerTask('default', ['concurrent']);
-	// grunt.registerTask('test', ['mochaTest']);
+	grunt.registerTask('build', ['concat', 'uglify']);
 };
