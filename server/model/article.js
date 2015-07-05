@@ -9,6 +9,7 @@ var ArticleSchema = new Schema({
 	article: String,
 	path: String,
 	name: String,
+	text: String,
 	type: {
 		type: String,
 		default: '转载'

@@ -4,6 +4,9 @@ $(function() {
 	var $img = $('#modal-img');
 	var $modalBox = $('#modalBox');
 	var $tbody = $('#tbody');
+	var $paging = $('#pagination');
+	var all = $paging.data('all');
+	var cur = $paging.data('cur');
 
 	$tbody.delegate('button', 'click', function(event) {
 		var className = $(this).attr('class');
@@ -21,4 +24,6 @@ $(function() {
 			}
 		}
 	});
+
+	$paging.html( madePaging(all, cur, 10, '/admin/demo/list') );
 });

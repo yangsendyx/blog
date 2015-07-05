@@ -666,3 +666,19 @@ direc.directive('getCommentTop', function(){
 		}
 	};
 });
+
+
+direc.directive('openHref', function(){
+	return {
+		link: function($scope, iElm, iAttrs) {
+			$scope.$watch('startBo', function(newVal) {
+				if( newVal ) {
+					setTimeout(function() {
+						var a = iElm.find('a');
+						a.attr('target', '_blank');
+					}, 50);
+				}
+			});
+		}
+	};
+});

@@ -369,11 +369,6 @@ ctrl.controller('ctrl-message', ['$scope', '$rootScope', 'ysHttp',  function($sc
 
 
 ctrl.controller('ctrl-about', ['$scope', '$rootScope', '$timeout', function($scope, $root, $timeout){
-	$scope.text = 'about';
-	$scope.startBo = false;
-	$root.loadingBo = true;
-	$timeout(function() {
-		$scope.startBo = true;
-		$root.loadingBo = false;
-	}, 2000);
+	$scope.startBo = true;
+	
 }]);

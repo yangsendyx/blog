@@ -34,7 +34,7 @@ exports.home = function(req, res, next) {
 
 // 文章上传页面
 exports.article = function(req, res, next) {
-	Category.findAll(function(err, categories) {
+	Category.find({}).sort({'meta.createAt': 1}).exec(function(err, categories) {
 		if( err ) return next(err);
 		res.render('article', {
 			active: 1,
@@ -45,18 +45,28 @@ exports.article = function(req, res, next) {
 
 // 文章列表页面
 exports.articleList = function(req, res, next) {
-	Article.find({})
+	var start = parseInt(req.query.start) || 0;
+	var length = parseInt(req.query.length) || 10;
+	Article.find({}, {'article': 0, 'text': 0})
 	.populate('category', 'name')
-	.sort('meta.updateAt')
+	.sort({'meta.updateAt': -1})
 	.exec(function(err, articles) {
 		if( err ) return next(err);
-		_.each(articles, function(el, i) {
+
+		var len = articles.length;
+		var all = Math.ceil(len / length);
+		var data = articles.slice(start, length+start);
+		var current = start / length + 1;
+
+		_.each(data, function(el, i) {
 			el.meta.time = moment(el.meta.updateAt).format('YYYY/MM/DD  HH:mm:ss');
 		});
-		articles.reverse();
+
 		res.render('articleList', {
 			active: 2,
-			articles: articles
+			articles: data,
+			allPage: all,
+			current: current
 		});
 	});
 	// res.render('articleList', {active: 2});
@@ -68,7 +78,7 @@ exports.articleUpdate = function(req, res, next) {
 
 	Article.findById(id, function(err, article) {
 		if( err ) return next(err);
-		Category.findAll(function(err, categories) {
+		Category.find({}).sort({'meta.createAt': 1}).exec(function(err, categories) {
 			if( err ) return next(err);
 			res.render('article', {
 				active: 1,
@@ -86,13 +96,27 @@ exports.demo = function(req, res, next) {
 
 // demo列表页面
 exports.demoList = function(req, res, next) {
-	Demo.findAll(function(err, demos) {
+	var start = parseInt(req.query.start) || 0;
+	var length = parseInt(req.query.length) || 10;
+
+	Demo.find({}).sort({'_id': -1}).exec(function(err, demos) {
 		if( err ) return next(err);
-		_.each(demos, function(el, i) {
+
+		var len = demos.length;
+		var all = Math.ceil(len / length);
+		var data = demos.slice(start, length+start);
+		var current = start / length + 1;
+
+
+		_.each(data, function(el, i) {
 			el.meta.time = moment(el.meta.updateAt).format('YYYY/MM/DD  HH:mm:ss');
 		});
-		demos.reverse();
-		res.render('demoList', {active: 4, demos: demos});
+		res.render('demoList', {
+			active: 4,
+			demos: data,
+			allPage: all,
+			current: current
+		});
 	});
 };
 
@@ -114,6 +138,7 @@ exports.login = function(req, res, next) {
 	});
 };
 
+// 推出 API
 exports.logout = function(req, res) {
 	delete req.session.user;
 	res.json({ type: 'ok' });
@@ -135,6 +160,8 @@ exports.updateArticle = function(req, res, next) {
 					article.path = data.path;
 					article.desc = data.desc;
 					article.article = data.article;
+					article.text = data.text;
+
 					article.save(function(err, article) {
 						if( err ) return res.json({ type: 'fail', info: err.toString() });
 						res.json({ type: 'ok' });
@@ -189,8 +216,10 @@ exports.updateArticle = function(req, res, next) {
 				name: data.name,
 				path: data.path,
 				desc: data.desc,
-				article: data.article
+				article: data.article,
+				text: data.text
 			}).save(function(err, article) {
+				if( err ) return res.json({ type: 'fail', info: err.toString() });
 				category.articles.push( article._id );
 				category.save(function(err, category) {
 					if( err ) return res.json({ type: 'fail', info: err.toString() });

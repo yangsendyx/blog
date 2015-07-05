@@ -1,17 +1,43 @@
 $(function() {
-	var ue = UE.getEditor('editor');
+	var opts = {
+		basePath: '/js/admin/lib',
+		file: {
+			name: 'article',
+			autoSave: 1000
+		},
+		theme: {
+			editor: '/themes/editor/epic-dark.css',
+			preview: '/themes/preview/github.css'
+		}
+	};
+
+	var editor = new EpicEditor(opts);
+
 	var $checkbox = $('#checkNewCategory');
 	var $choiceType = $('#choiceType');
 	var $radio = $choiceType.find('input[type="radio"]');
 	var $newCategory = $('#newCategory');
 	var $category = $('#category');
 	var $pathText = $('#pathText');
-	var dataArticle = $pathText.data('article');
+	var dataArticle = $pathText.data('text');
 	var $nameText = $('#nameText');
+	var $clear = $('#clear');
 	var $send = $('#send');
+	var $epiceditor = $('#epiceditor');
 
 	var categoryId = $category.data('select');
 	if( categoryId ) $category.find('option[value="'+categoryId+'"]').prop('selected', true);
+
+	$clear.click(function() {
+		editor.importFile('article', '');
+	});
+
+	$(document).keydown(function(ev) {
+		if( ev.keyCode == 9 ) {
+			ev.preventDefault();
+			$epiceditor.focus();
+		}
+	});
 
 	$checkbox.change(function() {
 		if( $(this).prop('checked') ) {
@@ -32,26 +58,29 @@ $(function() {
 		}
 	});
 	var choiceRadio = $choiceType.data('radio');
-	if( choiceRadio == '原创' ) $radio.eq(1).trigger('click');
+	$nameText.hide(); $pathText.hide();
+	if( choiceRadio == '转载' ) $radio.eq(0).trigger('click');
 
 	var $title = $('#title');
-	// var $desc = $('#desc');
 
-	if( dataArticle ) {
-		ue.addListener("ready", function () {
-			ue.setContent( dataArticle );
-		});
-	}
+	editor.load(function() {
+		if( dataArticle ) editor.importFile('article', dataArticle);
+	});
 
 	$send.click(function() {
 		var title = $title.val();
-		// var desc = $desc.val();
 		var category = $category.val();
 		var newCateBo = false;
 		var path = '';
 		var name = '';
-		var con = ue.getContent();
-		var desc = ue.getContentTxt().slice(0, 138);
+		var text = editor.exportFile('article', 'text');
+		var con = editor.exportFile('article', 'html');
+		var reg = /\r|\n|\#+|\!\[.+\]\(http.+\)/g;
+		var reg2 = /\[(.+)\]\(http.+\)/g;
+		var desc = text.replace(reg, '').replace(reg2, function($1, $2) {
+			return '(' + $2 + ')';
+		}).substr(0, 138);
+
 		desc += '...';
 		var article = '';
 		var id = $pathText.data('id');
@@ -71,13 +100,12 @@ $(function() {
 		article += con;
 
 		if( !title ) return alert('请填写标题');
-		// if( !desc ) return alert('请填写描述');
 		if( !category ) return alert('请填写或选择分类');
-		if( type == 'zhuan' ) {
+		if( type == '转载' ) {
 			if( !name ) return alert('请填写被转载者名称');
 			if( !path ) return alert('请填写转载地址');
 		}
-		if( !article ) return alert('请填写文章内容');
+		if( !text ) return alert('请填写文章内容');
 
 		var data = {
 			title: title,
@@ -88,9 +116,10 @@ $(function() {
 			name: name,
 			path: path,
 			article: article,
+			text: text,
 			id: id
 		};
-		
+
 		post('/admin/update/article', data, function(data) {
 			window.location.href = '/admin/article/list';
 		});

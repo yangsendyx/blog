@@ -106,3 +106,46 @@ function splitNum( num ) {
 	}
 	return orginNum + lastNum;
 }
+
+function madePaging(total, current, length, url) {
+	var con = '';
+	var run = function(max, min) {
+		for( var i=min; i<max; i++ ) {
+			if( i+1 == current ) {
+				con += '<li class="active"><a href="#">'+(i+1)+'</a></li>';
+			} else {
+				con += '<li><a href="'+url+'?start='+(i*length)+'&length='+length+'">'+(i+1)+'</a></li>';
+			}
+		}
+	};
+
+	if( current == 1 ) {
+		con = '<li class="disabled"><a href="#">首页</a></li>';
+	} else {
+		con = '<li><a href="'+url+'?start=0&length='+length+'">首页</a></li>';
+	}
+
+	if( total <= 5 ) {
+		run(total, 0);
+	} else {
+		if( current < 3 ) {
+			run(5, 0);
+		} else if( current > total-2 ) {
+			run(total, total-5);
+		} else {
+			con += '<li><a href="'+url+'?start='+((current-3)*length)+'&length='+length+'">'+(current-2)+'</a></li>';
+			con += '<li><a href="'+url+'?start='+((current-2)*length)+'&length='+length+'">'+(current-1)+'</a></li>';
+			con += '<li class="active"><a href="#">'+current+'</a></li>';
+			con += '<li><a href="'+url+'?start='+(current*length)+'&length='+length+'">'+(current+1)+'</a></li>';
+			con += '<li><a href="'+url+'?start='+((current+1)*length)+'&length='+length+'">'+(current+2)+'</a></li>';
+		}
+	}
+
+	if( current == total ) {
+		con += '<li class="disabled"><a href="#">尾页</a></li>';
+	} else {
+		con += '<li><a href="'+url+'?start='+((total-1)*length)+'&length='+length+'">尾页</a></li>';
+	}
+
+	return con;
+}

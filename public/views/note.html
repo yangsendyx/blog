@@ -3,10 +3,10 @@
 	<div class="article">
 		<div class="title">
 			<h2>{{ data.article.title }}</h2>
-			<p>分类：{{data.article.type == 'zhuan' || '转' ? '转载' : '原创' }} &nbsp;&nbsp;&nbsp;
+			<p>分类：{{data.article.type}} &nbsp;&nbsp;&nbsp;
 			更新时间：{{data.article.meta.updateAt | initTime}}</p>
 		</div>
-		<div class="body" bindonce ng-bind-html="data.article.article | to_trusted"></div>
+		<div class="body" bindonce ng-bind-html="data.article.article | to_trusted" open-href></div>
 	</div>
 	<div class="comment" get-comment-top>
 		<div class="text">

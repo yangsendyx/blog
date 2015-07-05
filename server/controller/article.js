@@ -10,7 +10,7 @@ exports.list = function(req, res) {
 	var type = req.query.type;
 	
 	if( type == 'all' ) {
-		Article.find({}, {'article': 0, "name": 0, "path": 0, "__v": 0, "category": 0})
+		Article.find({}, {'article': 0, "name": 0, "path": 0, "__v": 0, "category": 0, "text": 0})
 		.sort({'meta.updateAt': -1})
 		.exec(function(err, articles) {
 			if( err ) {
@@ -52,12 +52,15 @@ exports.category = function(req, res) {
 		}
 		var data = [];
 		_.each(categories, function(el, i) {
-			var json = {
-				_id: el._id,
-				name: el.name,
-				length: el.articles.length
-			};
-			data.push( json );
+			var len = el.articles.length;
+			if( len ) {
+				var json = {
+					_id: el._id,
+					name: el.name,
+					length: len
+				};
+				data.push( json );
+			}
 		});
 		res.json({ type: 'ok', data: data });
 	});
@@ -66,7 +69,7 @@ exports.category = function(req, res) {
 
 exports.article = function(req, res) {
 	var id = req.params.id;
-	Article.findOne({_id: id}, {'_id': 0, 'name': 0, 'path': 0, 'desc': 0, '__v': 0})
+	Article.findOne({_id: id}, {'_id': 0, 'name': 0, 'path': 0, 'desc': 0, '__v': 0, "text": 0})
 	.populate({
 		path: 'category',
 		select: {'name': 1, '_id': 0}

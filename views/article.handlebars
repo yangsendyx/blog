@@ -1,10 +1,11 @@
 
 {{#section 'link'}}
 <style type="text/css">
-	#editor { width: 100%; height: 600px;}
+	#epiceditor { width: 100%; height: 600px; box-shadow: 0 0 10px #333;}
 	label { text-align: left !important;}
 	#newCategory { display: none;}
-	#send-wrap {margin-top: 60px;}
+	#send-wrap {margin-top: 26px;}
+	#send { margin-left: 40px;}
 </style>
 {{/section}}
 
@@ -26,15 +27,7 @@
 					value="{{article.title}}"><!-- Handlebars模板引擎 -->
 				</div>
 			</div>
-			<br><!-- 
-			<div class="form-group">
-				<label for="desc" class="col-md-1 control-label">描述：</label>
-				<div class="col-md-7">
-					<input type="text" class="form-control" id="desc" placeholder="请填写文章描述信息"
-					value="{{article.desc}}">详细解读Handlebars
-				</div>
-			</div>
-			<br> -->
+			<br> 
 			<div class="form-group">
 				<label for="file" class="col-md-1 control-label">分类：</label>
 				<div class="col-md-7">
@@ -56,10 +49,10 @@
 				<label for="title" class="col-md-1 control-label">转载：</label>
 				<div class="col-md-7" id="choiceType" data-radio="{{article.type}}">
 					<label class="radio-inline">
-				    	<input type="radio" value="转载" name="choiceType" checked> 转载
+				    	<input type="radio" value="转载" name="choiceType"> 转载
 				    </label>
 				    <label class="radio-inline">
-				    	<input type="radio" value="原创" name="choiceType"> 原创
+				    	<input type="radio" value="原创" name="choiceType" checked> 原创
 				    </label>
 				</div>
 			</div>
@@ -71,7 +64,7 @@
 					value="{{article.name}}"><!-- 博客园 -->
 				</div>
 			</div>
-			<div class="form-group" id="pathText" data-article="{{article.article}}"
+			<div class="form-group" id="pathText" data-text="{{article.text}}"
 			data-id="{{article._id}}">
 				<label for="title" class="col-md-1 control-label">地址：</label>
 				<div class="col-md-7">
@@ -80,10 +73,11 @@
 				</div>
 			</div>
 			<br>
-			<script id="editor" type="text/plain"></script>
+			<div id="epiceditor"></div>
 			<br>
 			<div class="form-group" id="send-wrap">
-				<div class="col-md-1 col-md-offset-11">
+				<div class="col-md-2 col-md-offset-10">
+					<button type="button" class="btn btn-info" id="clear">清空</button>
 					<button type="button" class="btn btn-primary" id="send">提交</button>
 				</div>
 			</div>
@@ -92,7 +86,6 @@
 </div>
 
 {{#section 'script'}}
-<script type="text/javascript" src="/js/admin/lib/ueditor.config.js"></script>
-<script type="text/javascript" src="/js/admin/lib/ueditor.all.min.js"></script>
+<script type="text/javascript" src="/js/admin/lib/epiceditor.min.js"></script>
 <script type="text/javascript" src="/js/admin/article.js"></script>
 {{/section}}

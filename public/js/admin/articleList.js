@@ -1,5 +1,8 @@
 $(function() {
 	var $tbody = $('#tbody');
+	var $paging = $('#pagination');
+	var all = $paging.data('all');
+	var cur = $paging.data('cur');
 
 	$tbody.delegate('button.del', 'click', function(event) {
 		var id = $(this).data('id');
@@ -8,4 +11,6 @@ $(function() {
 			$tr.remove();
 		});
 	});
+
+	$paging.html( madePaging(all, cur, 10, '/admin/article/list') );
 });

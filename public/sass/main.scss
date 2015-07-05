@@ -521,7 +521,92 @@ canvas{
 			}
 		}
 		.body {
-			
+			margin-top: 20px;
+			box-sizing: border-box;
+			padding: 10px 30px;
+			code {
+				font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+				font-size: 14px;
+			}
+			a{
+				text-decoration: none;
+				&:hover {
+					text-decoration: underline;
+				}
+			}
+			p{
+				margin: 26px 0;
+				code {
+					padding: 2px 6px;
+					background-color: rgba(220,220,220,.6);
+					color: #c42e05;
+					border: 1px solid #bbb;
+					@include border-radius(2px);
+					font-size: 16px;
+					line-height: 32px;
+					margin-left: 4px;
+					margin-right: 4px;
+				}
+			}
+			img{
+				max-width: 100%;
+				vertical-align: top;
+				margin: auto;
+				@include box-shadow(0 0 6px #333);
+			}
+			pre{
+				margin: 26px 0;
+				padding: 10px;
+				background-color: rgba(220,220,220,.6);
+				border: 1px solid #bbb;
+				@include border-radius(4px);
+			}
+			table{
+				$border-color: #aaa;
+				$opacity: .65;
+				margin: 26px 0;
+				color:#333;
+				border-width: 1px;
+				border-color: $border-color;
+				border-collapse: collapse;
+				font-size: 14px;
+				thead{
+					tr{
+						background-color: rgba(240,240,240,$opacity);
+						th{
+							border-width: 1px;
+							padding: 8px;
+							border-style: solid;
+							border-color: $border-color;
+						}
+					}
+				}
+				tbody{
+					tr{
+						&:nth-child(odd) {
+							background-color: rgba(220,220,220,$opacity);
+						}
+						&:nth-child(even) {
+							background-color: rgba(240,240,240,$opacity);
+						}
+						td{
+							border-width: 1px;
+							padding: 8px;
+							border-style: solid;
+							border-color: $border-color;
+								
+						}
+					}
+				}
+			}
+			ul, ol{
+				padding-left:30px;
+				list-style-position: outside;
+				margin: 26px 0;
+				ul, ol{ margin: 0; }
+			}
+			ul{ list-style-type: disc;}
+			ol { list-style-type: decimal;}
 		}
 	}
 	.comment {
@@ -968,7 +1053,8 @@ canvas{
 
 #about {
 	@include background-image( linear-gradient(rgba(255, 255, 255, .85), rgba(187, 187, 187, .85)) );
-	height: 1300px;
+	height: 600px;
+	text-align: center;
 }
 
 #footer {
