@@ -2,7 +2,7 @@
 <html lang="en" ng-app="app">
 <head>
 	<meta charset="UTF-8">
-	<title>ys-Home</title>
+	<title>ys-Home，秀气小猪的个人博客</title>
 	<link rel="stylesheet" type="text/css" href="/css/main.css">
 	<link rel="Shortcut Icon" href="/img/myico.ico">
 </head>
@@ -32,7 +32,27 @@
 
 		<div ui-view set-height></div>
 
-		<div class="footer" id="footer"></div>
+		<div class="footer" id="footer">
+			<div class="wrap">
+				<div class="summary">
+					<p>ys-Home是我学习成长的一个缩影，旨在记录自己在工作、生活以及学习中的点点滴滴。也希望能够借此认识更多志同道合的朋友，彼此共勉。</p>
+				</div>
+				<div class="href">
+					<ul nav>
+						<li ng-click="toggle('index')">HOME</li>
+						<li ng-click="toggle('note-list')">博客</li>
+						<li ng-click="toggle('demo')">实验DEMO</li>
+						<li ng-click="toggle('message')">留言</li>
+						<li ng-click="toggle('about')">关于我</li>
+					</ul>
+				</div>
+				<div class="line"></div>
+				<div class="text">
+					<p>design & code by 秀气小猪 , base on nodeJS + mongoDB</p>
+					<p>粤ICP备14084840号 &nbsp; yshome.net.cn版权所有</p>
+				</div>
+			</div>
+		</div>
 	</div>
 
 
