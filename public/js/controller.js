@@ -24,7 +24,7 @@ ctrl.controller('myCtrl', ['$scope', '$rootScope', '$timeout', '$location', 'ysH
 	$scope.loginBo = false;
 	$scope.dialogBo = false;
 	// localStorage.removeItem('info');
-	var info = localStorage.getItem('info');
+	var info = localStorage.getItem('info'); 
 	var name = '';
 	var qq = '';
 
@@ -137,8 +137,8 @@ ctrl.controller('ctrl-note-list', ['$scope', '$rootScope', 'ysHttp', function($s
 		ajax.get(url, function(data) {
 			count++; if( count == 2 ) $scope.startBo = true;
 			var all = Math.ceil(parseInt(data.length) / 9);
-			var current = page;
-			$scope.data.paging = makePaging(all, current);
+			$scope.data.curPage = page;
+			$scope.data.paging = makePaging(all, page);
 
 			var arr = [];
 			var len = data.data.length;
@@ -154,10 +154,12 @@ ctrl.controller('ctrl-note-list', ['$scope', '$rootScope', 'ysHttp', function($s
 
 	$scope.fnpaging = function( page ) {
 		page = parseInt(page);
-		$scope.data.opacitBo = true;
-		setTimeout(function() {
-			$scope.getArticle(page, true);
-		}, 400);
+		if( page != $scope.data.curPage ) {
+			$scope.data.opacitBo = true;
+			setTimeout(function() {
+				$scope.getArticle(page, true);
+			}, 400);
+		}
 	};
 
 	$scope.tagFilter = function(obj) {

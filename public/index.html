@@ -5,6 +5,16 @@
 	<title>ys-Home，秀气小猪的个人博客</title>
 	<link rel="stylesheet" type="text/css" href="/css/main.css">
 	<link rel="Shortcut Icon" href="/img/myico.ico">
+	<script type="text/javascript">
+	(function() {
+		var isIE = function(ver){
+		    var b = document.createElement('b');
+		    b.innerHTML = '<!--[if IE ' + ver + ']><i></i><![endif]-->';
+		    return b.getElementsByTagName('i').length === 1;
+		};
+		if( isIE(6) || isIE(7) || isIE(8) ) window.location.href = '/error.html';
+	})();
+	</script>
 </head>
 <body delay>
 	<canvas id="canvas"></canvas>
@@ -49,21 +59,15 @@
 				<div class="line"></div>
 				<div class="text">
 					<p>design & code by 秀气小猪 , base on nodeJS + mongoDB</p>
-					<p>粤ICP备14084840号 &nbsp; yshome.net.cn版权所有</p>
+					<p>粤ICP备14084840号 &nbsp; yshome.net.cn</p>
 				</div>
 			</div>
 		</div>
 	</div>
 
-
 	<script src="http://cdnjscn.b0.upaiyun.com/libs/angular.js/1.3.0-beta.13/angular.min.js"></script>
 	<script src="http://cdnjscn.b0.upaiyun.com/libs/angular-bindonce/0.3.1/bindonce.min.js"></script>
 	<script src="http://cdnjscn.b0.upaiyun.com/libs/angular-ui-router/0.2.10/angular-ui-router.min.js"></script>
 	<script type="text/javascript" src="/js/build/main.min.js"></script>
-	<!-- <script type="text/javascript" src="/js/service.js"></script>
-	<script type="text/javascript" src="/js/directive.js"></script>
-	<script type="text/javascript" src="/js/filter.js"></script>
-	<script type="text/javascript" src="/js/controller.js"></script>
-	<script type="text/javascript" src="/js/main.js"></script> -->
 </body>
 </html>

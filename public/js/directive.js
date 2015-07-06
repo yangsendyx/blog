@@ -682,3 +682,46 @@ direc.directive('openHref', function(){
 		}
 	};
 });
+
+
+direc.directive('siteSummary', ['$window', 'ysAnimate', function($window, animate){
+	return {
+		link: function($scope, iElm, iAttrs) {
+			var p = iElm.find('p');
+			var distance = 800;
+			p.eq(0).css({
+				'-webkit-transform': 'translate('+(-distance)+'px, 0px)',
+				'-moz-transform': 'translate('+(-distance)+'px, 0px)',
+				'-ms-transform': 'translate('+(-distance)+'px, 0px)',
+				'-o-transform': 'translate('+(-distance)+'px, 0px)',
+				'transform': 'translate('+(-distance)+'px, 0px)',
+				'opacity': 0
+			});
+			p.eq(1).css({
+				'-webkit-transform': 'translate('+distance+'px, 0px)',
+				'-moz-transform': 'translate('+distance+'px, 0px)',
+				'-ms-transform': 'translate('+distance+'px, 0px)',
+				'-o-transform': 'translate('+distance+'px, 0px)',
+				'transform': 'translate('+distance+'px, 0px)',
+				'opacity': 0
+			});
+			p.eq(2).css('opacity', 0);
+			var limit = iElm[0].offsetTop + iElm[0].offsetHeight;
+			var time = 600;
+			var bo = true;
+			angular.element($window).bind('scroll', function() {
+				var t = this.document.body.scrollTop || this.document.documentElement.scrollTop;
+				if( t + CLIENT_H-100 > limit && bo ) {
+					bo = false;
+					animate.move(p.eq(0), { target: {opacity: 1}, time: time});
+					animate.transform(p.eq(0), {target: {translate:[0, 0]},time:time+400, fx: 'backOut'});
+					animate.move(p.eq(1), { target: {opacity: 1}, time: time});
+					animate.transform(p.eq(1), {target: {translate:[0, 0]},time:time+400, fx: 'backOut'});
+					setTimeout(function() {
+						animate.move(p.eq(2), { target: {opacity: 1}, time: time });
+					}, time+400);
+				}
+			});
+		}
+	};
+}]);

@@ -69,7 +69,6 @@ exports.articleList = function(req, res, next) {
 			current: current
 		});
 	});
-	// res.render('articleList', {active: 2});
 };
 
 // 文章修改页面

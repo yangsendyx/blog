@@ -17,5 +17,12 @@
 }
 .icon-guanyuwomen11:before { content: "\e600"; }
 .icon-liuyan:before { content: "\e601"; }
+.icon-qq:before { content: "\e608"; }
+.icon-chrome:before { content: "\e604"; }
+.icon-firefox:before { content: "\e605"; }
+.icon-github-alt:before { content: "\e609"; }
+.icon-email:before { content: "\e60a"; }
 .icon-xiebiji:before { content: "\e602"; }
+.icon-ie:before { content: "\e606"; }
+.icon-opera:before { content: "\e607"; }
 .icon-youceshiyan:before { content: "\e603"; }

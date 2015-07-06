@@ -4,51 +4,10 @@ module.exports = function(grunt) {
 		compass: {
 			dist: {
 		        options: {
-		        	config: 'public/config.rb',
-					basePath: 'public/'
+		        	config: './public/config.rb',
+					basePath: './public/'
 		        }
 		    }
-		},
-
-		watch: {
-			/*hbs: {
-				files: ['views/**'],
-				options: {
-					livereload: true
-				}
-			},*/
-			js: {
-				files: ['server/**'],
-				options: {
-					livereload: true
-				}
-			},
-			css: {
-				files: 'public/sass/*.scss',
-				tasks: ['compass']
-			}
-		},
-
-		nodemon: {
-			dev: {
-				options: {
-					file: 'app.js',
-					args: [],
-					ignoredFiles: ['node_modulse/**'],
-					watchedExtensions: ['js'],
-					watchedFolders: ['server'],
-					debug: true,
-					delayTime: 1,
-					cwd: __dirname
-				}
-			}
-		},
-
-		concurrent: {
-			tasks: ['watch', 'nodemon'],
-			options: {
-				logConcurrentOutput: true
-			}
 		},
 
 		concat: {
@@ -74,6 +33,46 @@ module.exports = function(grunt) {
 					'./public/js/build/main.min.js': './public/js/build/main.js'
 				}
 			}
+		},
+
+		watch: {
+			serverJs: {
+				files: ['./server/**'],
+				options: {
+					livereload: true
+				}
+			},
+			publicJs: {
+				files: './public/js/*.js',
+				tasks: ['concat', 'uglify']
+			},
+
+			css: {
+				files: './public/sass/*.scss',
+				tasks: ['compass']
+			}
+		},
+
+		nodemon: {
+			dev: {
+				options: {
+					file: 'app.js',
+					args: [],
+					ignoredFiles: ['node_modulse/**'],
+					watchedExtensions: ['js'],
+					watchedFolders: ['server'],
+					debug: true,
+					delayTime: 1,
+					cwd: __dirname
+				}
+			}
+		},
+
+		concurrent: {
+			tasks: ['watch', 'nodemon'],
+			options: {
+				logConcurrentOutput: true
+			}
 		}
 	});
 
@@ -87,5 +86,5 @@ module.exports = function(grunt) {
 
 	grunt.option('force', true);
 	grunt.registerTask('default', ['concurrent']);
-	grunt.registerTask('build', ['concat', 'uglify']);
+	// grunt.registerTask('build', ['concat', 'uglify']);
 };

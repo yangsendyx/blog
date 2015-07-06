@@ -55,9 +55,8 @@ canvas{
 	line-height: 50px;
 	opacity: 0;
 	@include box-shadow(#333 0 0 10px);
-	@include background-image(linear-gradient(rgba(255,255,255,.95), rgba(187,187,187,.95)));
+	@include background-image(linear-gradient(rgba(255,255,255,.92), rgba(187,187,187,.92)));
 	@include transition(opacity .4s);
-	
 	.bar{
 		width: 100%;
 		height: 2px;
@@ -1061,9 +1060,84 @@ canvas{
 }
 
 #about {
-	@include background-image( linear-gradient(rgba(255, 255, 255, .85), rgba(187, 187, 187, .85)) );
-	height: 600px;
-	text-align: center;
+	section{
+		&:nth-of-type(1) {
+			text-align: center;
+			.img{
+				margin: 200px auto 0;
+				width: 260px;
+				height: 260px;
+				box-sizing: border-box;
+				border: 6px solid rgb(220,220,220);
+				@include border-radius(50%);
+				overflow: hidden;
+				@include transition(all .4s);
+				img{
+					width: 100%;
+					height: 100%;
+					@include border-radius(50%);
+				}
+				&:hover {
+					@include transform( rotate(360deg) );
+				}
+			}
+			p{
+				margin: 30px auto;
+				color: #eee;
+				font-size: 22px; 
+			}
+			.href-wrap{
+				margin-top: 10px;
+				a{
+					display: inline-block;
+					width: 100px;
+					height: 100px;
+					border: 2px solid rgba(230,230,230,.8);
+					@include border-radius(50%);
+					color: rgba(230,230,230,.8);
+					text-decoration: none;
+					margin: 0 20px;
+					@include transition(all .3s);
+					span{
+						font-size: 60px;
+						line-height: 100px;
+					}
+					&:hover {
+						color: rgba(255,255,255,1);
+						border-color: rgba(255,255,255,1);
+					}
+				}
+			}
+		}
+		&:nth-of-type(2) {
+			margin: 260px 0;
+			p{
+				text-align: center;
+				margin: 30px;
+				color: #eee;
+				font-size: 20px;
+				a{
+					text-decoration: none;
+					color: #f90;
+				}
+
+				a.btn {
+					display: inline-block;
+					color: #eee;
+					height: 46px;
+					padding: 0 20px;
+					line-height: 46px;
+					@include border-radius(10px);
+					@include box-shadow(0 0 6px #333);
+					@include background-image( linear-gradient(rgba(187, 187, 187, .85), rgba(120, 120, 120, .85)) );
+					&:hover {
+						@include background-image( linear-gradient(rgba(200, 200, 200, .85), rgba(133, 133, 133, .85)) );
+						color: #fff;
+					}
+				}
+			}
+		}
+	}
 }
 
 #footer {
