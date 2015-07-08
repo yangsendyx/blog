@@ -275,16 +275,20 @@ service.factory('ysHttp', ['$rootScope', '$http', function($root, $http) {
 			if( data.type == 'ok' ) return cb( data );
 
 			if( /read/.test(data.info) ) {
-				console.log('读取数据错误');
+				$root.dialogShow = true;
+				$root.dialogMsg = '服务端读取数据失败<br>请稍后再行尝试！';
 			} else if( /save/.test(data.info) ) {
-				console.log('存储数据错误');
+				$root.dialogShow = true;
+				$root.dialogMsg = '服务端存储数据失败<br>请稍后再行尝试！';
 			} else {
-				console.log('服务器错误：' + data.info);
+				$root.dialogShow = true;
+				$root.dialogMsg = '服务器错误：' + data.info;
 			}
 		},
 		error: function(data) {
 			this.after();
-			console.log('通信失败！');
+			$root.dialogShow = true;
+			$root.dialogMsg = '与服务器通信失败，请稍后再行尝试<br>或者您也可以直接联系管理员，谢谢！';
 		}
 	};
 }]);

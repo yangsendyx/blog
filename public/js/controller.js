@@ -103,6 +103,13 @@ ctrl.controller('myCtrl', ['$scope', '$rootScope', '$timeout', '$location', 'ysH
 		$root.pagename = newVal;
 		$root.oldPage = newVal;
 	});
+
+	$scope.$watch('dialogShow', function(newVal) {
+		if( newVal ) {
+			$scope.fn.showDialog( $root.dialogMsg );
+			$scope.dialogShow = false;
+		}
+	});
 }]);
 
 

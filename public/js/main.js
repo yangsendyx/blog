@@ -25,6 +25,8 @@ app.run(['$rootScope', function($rootScope) {
 	$rootScope.articleID = '';
 	$rootScope.loadingBo = false;
 	$rootScope.time = 1000;
+	$rootScope.dialogMsg = '';
+	$rootScope.dialogShow = false;
 }]);
 
 app.config(['$stateProvider', '$urlRouterProvider', function($state, $url) {

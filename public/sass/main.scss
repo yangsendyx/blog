@@ -202,6 +202,8 @@ canvas{
 	text-align: center;
 	padding: 10px 20px;
 	opacity: 0;
+	font-size: 14px;
+	color: #555;
 	@include background-image( linear-gradient(rgba(255, 255, 255, 1), rgba(187, 187, 187, 1)) );
 	@include box-shadow(0 0 10px #333);
 	@include border-radius(16px);
@@ -878,6 +880,7 @@ canvas{
 								height: 100%;
 								vertical-align: top;
 								border-width: 0;
+								@include border-radius(50%);
 							}
 						}
 						.info-wrap{
