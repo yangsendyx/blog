@@ -493,10 +493,8 @@ ctrl.controller('ctrl-note-list', ['$scope', '$rootScope', 'ysHttp', function($s
 	$scope.fnpaging = function( page ) {
 		page = parseInt(page);
 		if( page != $scope.data.curPage ) {
+			$scope.getArticle(page, true);
 			$scope.data.opacitBo = true;
-			setTimeout(function() {
-				$scope.getArticle(page, true);
-			}, 400);
 		}
 	};
 
@@ -504,17 +502,15 @@ ctrl.controller('ctrl-note-list', ['$scope', '$rootScope', 'ysHttp', function($s
 		if( obj._id != $scope.data.type ) {
 			$scope.data.type = obj._id;
 			$scope.data.opacitBo = true;
-			setTimeout(function() {
-				$scope.getArticle(1, true, function() {
-					var len = $scope.data.category.length;
-					for( var i=0; i<len; i++ ) {
-						$scope.data.category[i].active = false;
-						if( $scope.data.category[i]._id == $scope.data.type ) {
-							$scope.data.category[i].active = true;
-						}
+			$scope.getArticle(1, true, function() {
+				var len = $scope.data.category.length;
+				for( var i=0; i<len; i++ ) {
+					$scope.data.category[i].active = false;
+					if( $scope.data.category[i]._id == $scope.data.type ) {
+						$scope.data.category[i].active = true;
 					}
-				});
-			}, 400);
+				}
+			});
 		}
 	};
 }]);
@@ -1328,7 +1324,7 @@ direc.directive('ctrlHeight', ['$timeout', 'ysAnimate', function($timeout, anima
 			});
 
 			$scope.$watch('ctrlOpenUlBo', function(newVal) {
-				// watch有轻微延迟
+				// 此处watch有轻微延迟
 				if( newVal ) {
 					$timeout(function() {
 						var lis = iElm.find('li');
