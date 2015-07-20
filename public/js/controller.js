@@ -311,7 +311,7 @@ function makePaging(all, current) {
 
 
 ctrl.controller('ctrl-message', ['$scope', '$rootScope', 'ysHttp',  function($scope, $root, ajax){
-	$scope.startBo = true;
+	$scope.startBo = false;
 	$scope.msg.url = '/message/save';
 	$scope.msg.info.msg = '';
 	

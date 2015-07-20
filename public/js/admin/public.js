@@ -1,4 +1,6 @@
 
+var $LOAD_BOX = $('#loading');
+
 (function() {
 	var $nav = $('#nav');
 	var num = parseInt( $nav.data('active') );
@@ -14,11 +16,12 @@
 })();
 
 function get(url, cb) {
+	showLoading();
 	$.ajax({
 		url: url
 	})
 	.done(function(data) {
-		if( data.type === 'ok' ) return cb(data);
+		if( data.type === 'ok' ) return hideLoading(cb, data);
 		console.log( data.info );
 		alert(data.info);
 	})
@@ -28,12 +31,13 @@ function get(url, cb) {
 }
 
 function del(url, cb) {
+	showLoading();
 	$.ajax({
 		url: url,
 		type: 'delete'
 	})
 	.done(function(data) {
-		if( data.type === 'ok' ) return cb(data);
+		if( data.type === 'ok' ) return hideLoading(cb, data);
 		console.log( data.info );
 		alert(data.info);
 	})
@@ -43,6 +47,7 @@ function del(url, cb) {
 }
 
 function post(url, data, cb) {
+	showLoading();
 	$.ajax({
 		url: url,
 		type: 'post',
@@ -50,7 +55,7 @@ function post(url, data, cb) {
 		data: data
 	})
 	.done(function(data) {
-		if( data.type === 'ok' ) return cb(data);
+		if( data.type === 'ok' ) return hideLoading(cb, data);
 		console.log( data.info );
 		alert(data.info);
 	})
@@ -60,6 +65,7 @@ function post(url, data, cb) {
 }
 
 function filePost(url, data, cb) {
+	showLoading();
 	$.ajax({
 		url: url,
 		type: 'post',
@@ -69,7 +75,7 @@ function filePost(url, data, cb) {
 		processData: false
 	})
 	.done(function(data) {
-		if( data.type === 'ok' ) return cb(data);
+		if( data.type === 'ok' ) return hideLoading(cb, data);
 		console.log( data.info );
 		alert(data.info);
 	})
@@ -78,18 +84,35 @@ function filePost(url, data, cb) {
 	});
 }
 
+function showLoading() {
+	$LOAD_BOX.show().animate({opacity: 1}, 400, 'linear');
+}
+
+function hideLoading( cb, data ) {
+	$LOAD_BOX.animate({opacity: 0}, 400, 'linear', function() {
+		$(this).hide(0);
+		if( cb ) {
+			if( data ) return cb(data);
+			cb();
+		}
+	});
+}
+
 function errXhr(http, text, err) {
-	if( http.status == 401 ) {
-		window.location.href = '/admin';
-	} else {
-		var info = '';
-		info += '获取数据出错，请稍后再试\n';
-		info += '网络状态码：' + http.status + '\n';
-		info += 'ajax状态码：' + http.readyState + '\n';
-		info += '错误文本信息：' + text;
-		console.log( info );
-		alert( info );
-	}
+	var cb = function(http, text, err) {
+		if( http.status == 401 ) {
+			window.location.href = '/admin';
+		} else {
+			var info = '';
+			info += '获取数据出错，请稍后再试\n';
+			info += '网络状态码：' + http.status + '\n';
+			info += 'ajax状态码：' + http.readyState + '\n';
+			info += '错误文本信息：' + text;
+			console.log( info );
+			alert( info );
+		}
+	};
+	hideLoading( cb );
 }
 
 function splitNum( num ) {

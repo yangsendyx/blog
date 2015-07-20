@@ -360,7 +360,7 @@ direc.directive('loading', [ '$interval', 'ysAnimate', function($interval, anima
 		link: function($scope, iElm, iAttrs) {
 			var elm = iElm.find('div');
 			iElm.css({'opacity': 0, 'top': (CLIENT_H-240) / 2 + 'px'});
-			var timer;
+			var timer, time;
 			$scope.$watch('loadingBo', function(newValue, oldValue, scope) {
 				if( newValue != oldValue ) {
 					if( newValue ) return Loading.show();
@@ -370,13 +370,14 @@ direc.directive('loading', [ '$interval', 'ysAnimate', function($interval, anima
 
 			var Loading = {
 				show: function() {
+					time = new Date().getTime();
 					iElm.css('display', 'block');
 					animate.move(iElm, { target: {opacity: 1}, time: 300 });
 					// iElm.css('opacity', 1);
 					this.run();
 				},
 				hide: function() {
-					animate.move(iElm, { target: {opacity: 0}, time: 500, fn: function() {
+					animate.move(iElm, { target: {opacity: 0}, time: 300, fn: function() {
 						iElm.css('display', 'none');
 						$interval.cancel(timer);
 					}});
