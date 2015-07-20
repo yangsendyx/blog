@@ -252,7 +252,7 @@ direc.directive('index', ['$timeout', '$state', '$rootScope', 'ysAnimate', funct
 }]);
 
 
-direc.directive('page', ['$timeout', '$state', '$rootScope', 'ysAnimate', function($timeout, $state, $root, animate){
+direc.directive('page', ['$timeout', '$state', '$rootScope', '$window', 'ysAnimate', function($timeout, $state, $root, $window, animate){
 	return {
 		link: function($scope, iElm, iAttrs) {
 			var distance = 400;
@@ -277,6 +277,10 @@ direc.directive('page', ['$timeout', '$state', '$rootScope', 'ysAnimate', functi
 					if( tag.length ) {
 						animate.transform( tag, {target: { translate: [0, -300]}, time: 700, fx: 'easeOutStrong'});
 						animate.move(tag, {target: {opacity: 0}, time: 700});
+					}
+					
+					if( /demo/g.test($root.oldPage) || /note-list/g.test($root.oldPage) ) {
+						angular.element($window).unbind('scroll');
 					}
 
 					$timeout(function() {
