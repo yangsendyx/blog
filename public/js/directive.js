@@ -604,16 +604,17 @@ direc.directive('ctrlHeight', ['$timeout', 'ysAnimate', function($timeout, anima
 					document.documentElement.scrollTop = document.body.scrollTop = 0;
 					animate.move(iElm, {
 						target: { height: 0 },
-						time: 600, fx: 'easeOutStrong',
+						time: 600, fx: 'easeOutStrong'
 					});
 					$timeout(function() {
 						$scope.getMsg( $scope.replyPageNum, true );
 						$scope.ctrlHeightBo = false;
-					}, 600);
+					}, 10); // loading的show+hide刚好600ms
 				}
 			});
 
 			$scope.$watch('ctrlOpenUlBo', function(newVal) {
+				// 此处watch有轻微延迟
 				if( newVal ) {
 					$timeout(function() {
 						var lis = iElm.find('li');
@@ -628,7 +629,7 @@ direc.directive('ctrlHeight', ['$timeout', 'ysAnimate', function($timeout, anima
 						$timeout(function() {
 							$scope.ctrlOpenUlBo = false;
 						}, 600);
-					}, 100);
+					}, 10);
 				}
 			});
 		}
