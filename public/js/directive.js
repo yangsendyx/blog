@@ -383,7 +383,7 @@ direc.directive('loading', [ '$interval', 'ysAnimate', function($interval, anima
 					}});
 				},
 				run: function() {
-					var time = 1600;
+					var time = 1500;
 					var fn = function() {
 						elm.css({'-webkit-transform':'rotate(0deg)','-moz-transform':'rotate(0deg)','-ms-transform':'rotate(0deg)','-o-transform':'rotate(0deg)','transform':'rotate(0deg)'
 						});

@@ -252,11 +252,9 @@ service.factory('ysHttp', ['$rootScope', '$http', function($root, $http) {
 		},
 		after: function( cb ) {
 			var dif = new Date().getTime() - time;
-			if( dif >= 300 ) {
-				outTime = 0;
-			} else {
-				outTime = 300 - dif;
-			}
+			var outTime = 0;
+			if( dif < 300 ) outTime = 300 - dif;
+			
 			setTimeout(function(){
 				$root.loadingBo = false;
 				if( cb ) setTimeout(cb, 300);
@@ -1093,7 +1091,7 @@ direc.directive('loading', [ '$interval', 'ysAnimate', function($interval, anima
 					}});
 				},
 				run: function() {
-					var time = 1600;
+					var time = 1500;
 					var fn = function() {
 						elm.css({'-webkit-transform':'rotate(0deg)','-moz-transform':'rotate(0deg)','-ms-transform':'rotate(0deg)','-o-transform':'rotate(0deg)','transform':'rotate(0deg)'
 						});
