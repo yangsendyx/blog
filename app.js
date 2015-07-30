@@ -47,9 +47,10 @@ app.use( expressSession({
 	})
 }));
 
+var sysLogStream = fs.createWriteStream(__dirname + '/sys.log', {flags: 'a'});
 if( app.get('env') === 'development' ) {
 	app.set('showStackError', true);
-	app.use( morgan('dev') );
+	app.use( morgan('combined', {stream: sysLogStream}) );
 	mongoose.set('debug', true);
 }
 
