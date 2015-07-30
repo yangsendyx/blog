@@ -48,9 +48,10 @@ app.use( expressSession({
 }));
 
 var sysLogStream = fs.createWriteStream(__dirname + '/sys.log', {flags: 'a'});
+var losType = ':remote-addr - :remote-user [:date[web]] ":method :url HTTP/:http-version" :status ":referrer"';
 if( app.get('env') === 'development' ) {
 	app.set('showStackError', true);
-	app.use( morgan('combined', {stream: sysLogStream}) );
+	app.use( morgan(losType, {stream: sysLogStream}) );
 	mongoose.set('debug', true);
 }
 
