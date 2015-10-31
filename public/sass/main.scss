@@ -527,6 +527,8 @@ canvas{
 			code {
 				font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
 				font-size: 14px;
+			  	word-wrap: break-word;
+				word-break: normal;
 			}
 			a{
 				text-decoration: none;
@@ -555,8 +557,6 @@ canvas{
 					font-size: 16px;
 					margin-left: 4px;
 					margin-right: 4px;
-				  	word-wrap: break-word;
-  					word-break: normal;
 				}
 			}
 			img{
