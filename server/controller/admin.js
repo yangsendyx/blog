@@ -66,8 +66,7 @@ exports.articleList = function(req, res, next) {
 			active: 2,
 			articles: data,
 			allPage: all,
-			current: current,
-			total: len
+			current: current
 		});
 	});
 };
@@ -115,8 +114,7 @@ exports.demoList = function(req, res, next) {
 			active: 4,
 			demos: data,
 			allPage: all,
-			current: current,
-			total: len
+			current: current
 		});
 	});
 };

@@ -244,21 +244,12 @@ service.factory('ysAnimate', function() {
 
 
 service.factory('ysHttp', ['$rootScope', '$http', function($root, $http) {
-	var time;
 	return {
 		before: function() {
 			$root.loadingBo = true;
-			time = new Date().getTime();
 		},
-		after: function( cb ) {
-			var dif = new Date().getTime() - time;
-			var outTime = 0;
-			if( dif < 300 ) outTime = 300 - dif;
-			
-			setTimeout(function(){
-				$root.loadingBo = false;
-				if( cb ) setTimeout(cb, 300);
-			}, outTime);
+		after: function() {
+			$root.loadingBo = false;
 		},
 		get: function(url, cb) {
 			var This = this;
@@ -280,20 +271,19 @@ service.factory('ysHttp', ['$rootScope', '$http', function($root, $http) {
 		},
 
 		success: function(data, cb) {
-			this.after(function() {
-				if( data.type == 'ok' ) return cb( data );
+			this.after();
+			if( data.type == 'ok' ) return cb( data );
 
-				if( /read/.test(data.info) ) {
-					$root.dialogShow = true;
-					$root.dialogMsg = '服务端读取数据失败<br>请稍后再行尝试！';
-				} else if( /save/.test(data.info) ) {
-					$root.dialogShow = true;
-					$root.dialogMsg = '服务端存储数据失败<br>请稍后再行尝试！';
-				} else {
-					$root.dialogShow = true;
-					$root.dialogMsg = '服务器错误：' + data.info;
-				}
-			});
+			if( /read/.test(data.info) ) {
+				$root.dialogShow = true;
+				$root.dialogMsg = '服务端读取数据失败<br>请稍后再行尝试！';
+			} else if( /save/.test(data.info) ) {
+				$root.dialogShow = true;
+				$root.dialogMsg = '服务端存储数据失败<br>请稍后再行尝试！';
+			} else {
+				$root.dialogShow = true;
+				$root.dialogMsg = '服务器错误：' + data.info;
+			}
 		},
 		error: function(data) {
 			this.after();
@@ -491,8 +481,10 @@ ctrl.controller('ctrl-note-list', ['$scope', '$rootScope', 'ysHttp', function($s
 	$scope.fnpaging = function( page ) {
 		page = parseInt(page);
 		if( page != $scope.data.curPage ) {
-			$scope.getArticle(page, true);
 			$scope.data.opacitBo = true;
+			setTimeout(function() {
+				$scope.getArticle(page, true);
+			}, 400);
 		}
 	};
 
@@ -500,15 +492,17 @@ ctrl.controller('ctrl-note-list', ['$scope', '$rootScope', 'ysHttp', function($s
 		if( obj._id != $scope.data.type ) {
 			$scope.data.type = obj._id;
 			$scope.data.opacitBo = true;
-			$scope.getArticle(1, true, function() {
-				var len = $scope.data.category.length;
-				for( var i=0; i<len; i++ ) {
-					$scope.data.category[i].active = false;
-					if( $scope.data.category[i]._id == $scope.data.type ) {
-						$scope.data.category[i].active = true;
+			setTimeout(function() {
+				$scope.getArticle(1, true, function() {
+					var len = $scope.data.category.length;
+					for( var i=0; i<len; i++ ) {
+						$scope.data.category[i].active = false;
+						if( $scope.data.category[i]._id == $scope.data.type ) {
+							$scope.data.category[i].active = true;
+						}
 					}
-				}
-			});
+				});
+			}, 400);
 		}
 	};
 }]);
@@ -636,7 +630,7 @@ function makePaging(all, current) {
 
 
 ctrl.controller('ctrl-message', ['$scope', '$rootScope', 'ysHttp',  function($scope, $root, ajax){
-	$scope.startBo = false;
+	$scope.startBo = true;
 	$scope.msg.url = '/message/save';
 	$scope.msg.info.msg = '';
 	
@@ -960,7 +954,7 @@ direc.directive('index', ['$timeout', '$state', '$rootScope', 'ysAnimate', funct
 }]);
 
 
-direc.directive('page', ['$timeout', '$state', '$rootScope', '$window', 'ysAnimate', function($timeout, $state, $root, $window, animate){
+direc.directive('page', ['$timeout', '$state', '$rootScope', 'ysAnimate', function($timeout, $state, $root, animate){
 	return {
 		link: function($scope, iElm, iAttrs) {
 			var distance = 400;
@@ -985,10 +979,6 @@ direc.directive('page', ['$timeout', '$state', '$rootScope', '$window', 'ysAnima
 					if( tag.length ) {
 						animate.transform( tag, {target: { translate: [0, -300]}, time: 700, fx: 'easeOutStrong'});
 						animate.move(tag, {target: {opacity: 0}, time: 700});
-					}
-					
-					if( /demo/g.test($root.oldPage) || /note-list/g.test($root.oldPage) ) {
-						angular.element($window).unbind('scroll');
 					}
 
 					$timeout(function() {
@@ -1072,7 +1062,7 @@ direc.directive('loading', [ '$interval', 'ysAnimate', function($interval, anima
 		link: function($scope, iElm, iAttrs) {
 			var elm = iElm.find('div');
 			iElm.css({'opacity': 0, 'top': (CLIENT_H-240) / 2 + 'px'});
-			var timer, time;
+			var timer;
 			$scope.$watch('loadingBo', function(newValue, oldValue, scope) {
 				if( newValue != oldValue ) {
 					if( newValue ) return Loading.show();
@@ -1082,20 +1072,19 @@ direc.directive('loading', [ '$interval', 'ysAnimate', function($interval, anima
 
 			var Loading = {
 				show: function() {
-					time = new Date().getTime();
 					iElm.css('display', 'block');
 					animate.move(iElm, { target: {opacity: 1}, time: 300 });
 					// iElm.css('opacity', 1);
 					this.run();
 				},
 				hide: function() {
-					animate.move(iElm, { target: {opacity: 0}, time: 300, fn: function() {
+					animate.move(iElm, { target: {opacity: 0}, time: 500, fn: function() {
 						iElm.css('display', 'none');
 						$interval.cancel(timer);
 					}});
 				},
 				run: function() {
-					var time = 1500;
+					var time = 1600;
 					var fn = function() {
 						elm.css({'-webkit-transform':'rotate(0deg)','-moz-transform':'rotate(0deg)','-ms-transform':'rotate(0deg)','-o-transform':'rotate(0deg)','transform':'rotate(0deg)'
 						});
@@ -1316,17 +1305,16 @@ direc.directive('ctrlHeight', ['$timeout', 'ysAnimate', function($timeout, anima
 					document.documentElement.scrollTop = document.body.scrollTop = 0;
 					animate.move(iElm, {
 						target: { height: 0 },
-						time: 600, fx: 'easeOutStrong'
+						time: 600, fx: 'easeOutStrong',
 					});
 					$timeout(function() {
 						$scope.getMsg( $scope.replyPageNum, true );
 						$scope.ctrlHeightBo = false;
-					}, 10); // loading的show+hide刚好600ms
+					}, 600);
 				}
 			});
 
 			$scope.$watch('ctrlOpenUlBo', function(newVal) {
-				// 此处watch有轻微延迟
 				if( newVal ) {
 					$timeout(function() {
 						var lis = iElm.find('li');
@@ -1341,7 +1329,7 @@ direc.directive('ctrlHeight', ['$timeout', 'ysAnimate', function($timeout, anima
 						$timeout(function() {
 							$scope.ctrlOpenUlBo = false;
 						}, 600);
-					}, 10);
+					}, 100);
 				}
 			});
 		}

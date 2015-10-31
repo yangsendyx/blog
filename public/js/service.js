@@ -244,21 +244,12 @@ service.factory('ysAnimate', function() {
 
 
 service.factory('ysHttp', ['$rootScope', '$http', function($root, $http) {
-	var time;
 	return {
 		before: function() {
 			$root.loadingBo = true;
-			time = new Date().getTime();
 		},
-		after: function( cb ) {
-			var dif = new Date().getTime() - time;
-			var outTime = 0;
-			if( dif < 300 ) outTime = 300 - dif;
-			
-			setTimeout(function(){
-				$root.loadingBo = false;
-				if( cb ) setTimeout(cb, 300);
-			}, outTime);
+		after: function() {
+			$root.loadingBo = false;
 		},
 		get: function(url, cb) {
 			var This = this;
@@ -280,20 +271,19 @@ service.factory('ysHttp', ['$rootScope', '$http', function($root, $http) {
 		},
 
 		success: function(data, cb) {
-			this.after(function() {
-				if( data.type == 'ok' ) return cb( data );
+			this.after();
+			if( data.type == 'ok' ) return cb( data );
 
-				if( /read/.test(data.info) ) {
-					$root.dialogShow = true;
-					$root.dialogMsg = '服务端读取数据失败<br>请稍后再行尝试！';
-				} else if( /save/.test(data.info) ) {
-					$root.dialogShow = true;
-					$root.dialogMsg = '服务端存储数据失败<br>请稍后再行尝试！';
-				} else {
-					$root.dialogShow = true;
-					$root.dialogMsg = '服务器错误：' + data.info;
-				}
-			});
+			if( /read/.test(data.info) ) {
+				$root.dialogShow = true;
+				$root.dialogMsg = '服务端读取数据失败<br>请稍后再行尝试！';
+			} else if( /save/.test(data.info) ) {
+				$root.dialogShow = true;
+				$root.dialogMsg = '服务端存储数据失败<br>请稍后再行尝试！';
+			} else {
+				$root.dialogShow = true;
+				$root.dialogMsg = '服务器错误：' + data.info;
+			}
 		},
 		error: function(data) {
 			this.after();

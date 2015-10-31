@@ -350,8 +350,6 @@ canvas{
 					line-height: 28px;
 					padding: 6px 10px;
 					text-indent: 36px;
-					word-wrap: break-word;
-					word-break: normal;
 				}
 			}
 			.foot{
@@ -529,10 +527,6 @@ canvas{
 			code {
 				font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
 				font-size: 14px;
-				max-width: 100%;
-				display: block;
-				word-wrap: break-word;
-				word-break: normal;
 			}
 			a{
 				text-decoration: none;
@@ -561,7 +555,6 @@ canvas{
 					font-size: 16px;
 					margin-left: 4px;
 					margin-right: 4px;
-					display: inline-block;
 				}
 			}
 			img{

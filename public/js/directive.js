@@ -252,7 +252,7 @@ direc.directive('index', ['$timeout', '$state', '$rootScope', 'ysAnimate', funct
 }]);
 
 
-direc.directive('page', ['$timeout', '$state', '$rootScope', '$window', 'ysAnimate', function($timeout, $state, $root, $window, animate){
+direc.directive('page', ['$timeout', '$state', '$rootScope', 'ysAnimate', function($timeout, $state, $root, animate){
 	return {
 		link: function($scope, iElm, iAttrs) {
 			var distance = 400;
@@ -277,10 +277,6 @@ direc.directive('page', ['$timeout', '$state', '$rootScope', '$window', 'ysAnima
 					if( tag.length ) {
 						animate.transform( tag, {target: { translate: [0, -300]}, time: 700, fx: 'easeOutStrong'});
 						animate.move(tag, {target: {opacity: 0}, time: 700});
-					}
-					
-					if( /demo/g.test($root.oldPage) || /note-list/g.test($root.oldPage) ) {
-						angular.element($window).unbind('scroll');
 					}
 
 					$timeout(function() {
@@ -364,7 +360,7 @@ direc.directive('loading', [ '$interval', 'ysAnimate', function($interval, anima
 		link: function($scope, iElm, iAttrs) {
 			var elm = iElm.find('div');
 			iElm.css({'opacity': 0, 'top': (CLIENT_H-240) / 2 + 'px'});
-			var timer, time;
+			var timer;
 			$scope.$watch('loadingBo', function(newValue, oldValue, scope) {
 				if( newValue != oldValue ) {
 					if( newValue ) return Loading.show();
@@ -374,20 +370,19 @@ direc.directive('loading', [ '$interval', 'ysAnimate', function($interval, anima
 
 			var Loading = {
 				show: function() {
-					time = new Date().getTime();
 					iElm.css('display', 'block');
 					animate.move(iElm, { target: {opacity: 1}, time: 300 });
 					// iElm.css('opacity', 1);
 					this.run();
 				},
 				hide: function() {
-					animate.move(iElm, { target: {opacity: 0}, time: 300, fn: function() {
+					animate.move(iElm, { target: {opacity: 0}, time: 500, fn: function() {
 						iElm.css('display', 'none');
 						$interval.cancel(timer);
 					}});
 				},
 				run: function() {
-					var time = 1500;
+					var time = 1600;
 					var fn = function() {
 						elm.css({'-webkit-transform':'rotate(0deg)','-moz-transform':'rotate(0deg)','-ms-transform':'rotate(0deg)','-o-transform':'rotate(0deg)','transform':'rotate(0deg)'
 						});
@@ -608,17 +603,16 @@ direc.directive('ctrlHeight', ['$timeout', 'ysAnimate', function($timeout, anima
 					document.documentElement.scrollTop = document.body.scrollTop = 0;
 					animate.move(iElm, {
 						target: { height: 0 },
-						time: 600, fx: 'easeOutStrong'
+						time: 600, fx: 'easeOutStrong',
 					});
 					$timeout(function() {
 						$scope.getMsg( $scope.replyPageNum, true );
 						$scope.ctrlHeightBo = false;
-					}, 10); // loading的show+hide刚好600ms
+					}, 600);
 				}
 			});
 
 			$scope.$watch('ctrlOpenUlBo', function(newVal) {
-				// 此处watch有轻微延迟
 				if( newVal ) {
 					$timeout(function() {
 						var lis = iElm.find('li');
@@ -633,7 +627,7 @@ direc.directive('ctrlHeight', ['$timeout', 'ysAnimate', function($timeout, anima
 						$timeout(function() {
 							$scope.ctrlOpenUlBo = false;
 						}, 600);
-					}, 10);
+					}, 100);
 				}
 			});
 		}
