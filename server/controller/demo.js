@@ -6,7 +6,7 @@ var Demo = require('../model/demo');
 exports.list = function( req, res ) {
 	var start = parseInt(req.query.start);
 	var limit = 9;
-	Demo.findAll(function(err, demos) {
+	Demo.find({}).sort({id: -1}).exec(function(err, demos) {
 		if( err ) {
 			console.log(err);
 			return res.json({ type: 'fail', info: 'read demos error' });
