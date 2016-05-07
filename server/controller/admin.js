@@ -139,7 +139,7 @@ exports.login = function(req, res, next) {
 	});
 };
 
-// 推出 API
+// 退出 API
 exports.logout = function(req, res) {
 	delete req.session.user;
 	res.json({ type: 'ok' });
