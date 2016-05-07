@@ -13,7 +13,6 @@ exports.list = function( req, res ) {
 			console.log(err);
 			return res.json({ type: 'fail', info: 'read demos error' });
 		}
-		console.log( demos );
 		var length = demos.length;
 		var arr = demos.slice(start, limit + start);
 
