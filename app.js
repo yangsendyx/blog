@@ -52,7 +52,7 @@ var losType = ':remote-addr - :remote-user [:date[web]] ":method :url HTTP/:http
 if( app.get('env') === 'development' ) {
 	app.set('showStackError', true);
 	app.use( morgan(losType, {stream: sysLogStream}) );
-	mongoose.set('debug', true);
+	// mongoose.set('debug', true);
 }
 
 router( app );
