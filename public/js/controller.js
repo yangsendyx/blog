@@ -1,4 +1,3 @@
-
 var ctrl = angular.module('myController', []);
 
 ctrl.controller('myCtrl', ['$scope', '$rootScope', '$timeout', '$location', 'ysHttp', function($scope, $root, $timeout, $location, ajax){

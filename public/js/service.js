@@ -1,4 +1,3 @@
-
 var service = angular.module('myService', []);
 
 service.factory('ysAnimate', function() {

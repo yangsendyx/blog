@@ -1,4 +1,3 @@
-
 function Canvas(ctx, w, h) {
 	this.ctx = ctx;
 	this.clientW = w;

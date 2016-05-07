@@ -1,4 +1,3 @@
-
 var _ = require('underscore');
 var moment = require('moment');
 var Demo = require('../model/demo');

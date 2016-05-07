@@ -1,4 +1,3 @@
-
 var $LOAD_BOX = $('#loading');
 
 (function() {

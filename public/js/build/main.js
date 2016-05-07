@@ -1,4 +1,3 @@
-
 var service = angular.module('myService', []);
 
 service.factory('ysAnimate', function() {
@@ -1507,4 +1506,3 @@ app.config(['$stateProvider', '$urlRouterProvider', function($state, $url) {
 		controller: 'ctrl-about'
 	});
 }]);
-
