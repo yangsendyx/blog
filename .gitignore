@@ -2,6 +2,7 @@
 node_modules
 public/demo
 public/test.html
+public/m
 sys.log
 test.js
 **/.DS_Store
