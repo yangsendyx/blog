@@ -5,6 +5,17 @@
 	<meta name="keywords"　content="ys-Home, 秀气小猪, 个人博客, 成长记录">
 	<meta name="description" content="ys-Home，秀气小猪的个人博客">
 	<title>ys-Home，秀气小猪的个人博客</title>
+	<script type="text/javascript">
+	(function() {
+		var ua =  navigator.userAgent;
+		isAndroid = /Android/i.test(ua);
+		isBlackBerry = /BlackBerry/i.test(ua);
+		isWindowPhone = /IEMobile/i.test(ua);
+		isIOS = /iPhone|iPad|iPod/i.test(ua);
+		isMobile = isAndroid || isBlackBerry || isWindowPhone || isIOS;
+		if( isMobile ) window.location.href = '/m/dist/';
+	})();
+	</script>
 	<link rel="stylesheet" type="text/css" href="/css/main.css">
 	<link rel="Shortcut Icon" href="/img/myico.ico">
 	<script type="text/javascript">
