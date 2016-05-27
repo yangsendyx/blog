@@ -46,6 +46,7 @@ exports.save = function(req, res) {
 				console.log( err );
 				return res.json({ type: 'fail', info: 'read message error' });
 			}
+			if( !msg ) return res.json({ type: 'fail', info: 'read message error' });
 			var newData = {
 				from: data.from,
 				to: data.to,
