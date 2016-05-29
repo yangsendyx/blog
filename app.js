@@ -32,7 +32,7 @@ app.set('view cache', false);
 app.disable('x-powered-by');
 
 app.use( express.static(__dirname + '/public') );
-// app.use( favicon(__dirname + '/public/img/myico.ico') );
+app.use( favicon(__dirname + '/public/favicon.ico') );
 app.use( bodyParser.urlencoded({extended: false}) );
 app.use( bodyParser.json() );
 app.use( cookieParser(credentials.cookie) );
