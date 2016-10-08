@@ -41,4 +41,8 @@ module.exports = function(app) {
 	app.get('/message/list', msg.list);
 	// save
 	app.post('/message/save', msg.save);
+
+	app.get('/photo/login', admin.renderLogin);
+	app.post('/photo/login', admin.photoLogin);
+	app.get('/photo', admin.photo);
 };

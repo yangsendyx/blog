@@ -18,7 +18,7 @@ exports.verify = function( req, res, next ) {
 	} else {
 		res.redirect(303, '/admin');
 	}
-	next();
+	// next();
 };
 
 // 登陆页面
@@ -351,4 +351,38 @@ exports.articleListDel = function(req, res, next) {
 			count++; run();
 		});
 	});
+};
+
+exports.photoLogin = function(req, res, next) {
+	var name = req.body.name;
+	var pass = req.body.pass;
+
+	User.findOne({name: name}, function(err, user) {
+		if( err ) return res.json({ type: 'fail', info: err.toString() });
+		if( !user ) return res.json({ type: 'fail', info: 'user is not found' });
+
+		if( user.pass == pass ) {
+			req.session.user = user;
+			res.json({ type: 'ok' });
+		} else {
+			res.json({ type: 'fail', info: 'password is wrong' });
+		}
+	});
+};
+
+exports.renderLogin = function(req, res, next) {
+	res.render('photologin', {});
+};
+
+exports.photo = function(req, res, next) {
+	var user = req.session.user || '';
+	if( !user && user.role != 6 ) {
+		if( req.xhr ) {
+			return res.sendStatus(401);
+		} else {
+			return res.redirect(303, '/photo/login');
+		}
+	}
+
+	res.render('photo', {});
 };
